@@ -1,5 +1,5 @@
 {
-  "name": "ApexWorkspace",
+  "name": "apexworkspace",
   "version": "1.0.0",
   "description": "Desktop workspace application with document editing and notifications",
   "main": "main.js",
@@ -20,12 +20,6 @@
     "mac": {
       "category": "public.app-category.productivity",
       "target": ["dmg", "zip"]
-    },
-    "win": {
-      "target": ["nsis"]
-    },
-    "linux": {
-      "target": ["AppImage", "deb"]
     },
     "publish": {
       "provider": "github",
