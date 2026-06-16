@@ -3,7 +3,7 @@ name: Build and Publish Electron App
 on:
   push:
     tags:
-      - 'v*' # Triggers the build whenever you push a version tag like v1.0.0
+      - 'v*'
 
 jobs:
   release:
@@ -12,7 +12,6 @@ jobs:
 
     strategy:
       matrix:
-        # This spins up three separate virtual machines simultaneously
         os: [macos-latest, windows-latest, ubuntu-latest]
 
     steps:
@@ -30,4 +29,4 @@ jobs:
       - name: Build and Publish
         run: npm run dist -- --publish always
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Allows GitHub to attach the binaries to your Release page
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
