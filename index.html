@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Workspace Matrix OS</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .no-drag { -webkit-app-region: no-drag; }
+        .drag { -webkit-app-region: drag; }
+        .smooth-panel {
+            transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .hidden-panel {
+            opacity: 0;
+            transform: translateX(18px) scale(0.985);
+            pointer-events: none;
+        }
+        .active-panel {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            pointer-events: auto;
+        }
+        .smooth-tab { transition: all 0.2s ease-in-out; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+    </style>
+</head>
+<body class="bg-[#161616] text-zinc-100 font-sans select-none overflow-hidden h-screen flex flex-col p-4">
+
+    <div class="flex-1 bg-[#1e1e1e] rounded-2xl border border-white/5 shadow-2xl overflow-hidden flex flex-col">
+        
+        <div class="drag h-14 bg-[#242424] border-b border-white/5 flex items-center justify-between px-6 shrink-0 relative">
+            <div class="flex items-center space-x-2 no-drag w-24">
+                </div>
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div class="text-[11px] font-bold text-zinc-400 uppercase tracking-[0.3em]">Apex Workspace Matrix OS</div>
+            </div>
+            <div class="no-drag z-10">
+                <button onclick="triggerTestNotification()" class="px-3.5 py-1.5 bg-[#2d2d2d] hover:bg-[#363636] text-white text-xs font-bold rounded-xl border border-white/10 transition active:scale-95 flex items-center space-x-2 shadow-md">
+                    <span>🚀</span> <span>Test Notification</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex flex-1 overflow-hidden relative">
+            
+            <div class="w-68 bg-[#111111] border-r border-white/5 flex flex-col p-5 shrink-0 no-drag justify-between">
+                <div class="space-y-6">
+                    <div class="p-3.5 bg-zinc-900/60 border border-white/5 rounded-xl flex items-center space-x-3.5 shadow-inner">
+                        <div class="h-7 w-7 rounded-lg bg-purple-600 flex items-center justify-center text-xs font-bold text-white shadow-md">Ω</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-bold text-zinc-200 truncate">Ahan's Engine Workspace</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <div class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider px-2 mb-2">Navigation Console</div>
+                        <button onclick="switchView('home')" id="btn-home" class="w-full text-left px-3.5 py-3 rounded-xl text-xs font-medium bg-[#2a2a2a] text-white transition flex items-center space-x-3 shadow-sm">
+                            <span class="text-sm">🏠</span> <span>Home Base</span>
+                        </button>
+                        <button onclick="switchView('docs')" id="btn-docs" class="w-full text-left px-3.5 py-3 rounded-xl text-xs font-medium text-zinc-400 hover:bg-zinc-900/40 hover:text-zinc-200 transition flex items-center space-x-3">
+                            <span class="text-sm">📝</span> <span>Word Office Canvas</span>
+                        </button>
+                        <button onclick="switchView('reminders')" id="btn-reminders" class="w-full text-left px-3.5 py-3 rounded-xl text-xs font-medium text-zinc-400 hover:bg-zinc-900/40 hover:text-zinc-200 transition flex items-center space-x-3">
+                            <span class="text-sm">📋</span> <span>Finder Tasks & Reminders</span>
+                        </button>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <div class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider px-2 mb-2">Communications</div>
+                        <button onclick="switchView('chat')" id="btn-chat" class="w-full text-left px-3.5 py-3 rounded-xl text-xs font-medium text-zinc-400 hover:bg-zinc-900/40 hover:text-zinc-200 transition flex items-center space-x-3">
+                            <span class="text-sm">💬</span> <span>Team Live Servers</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="border-t border-white/5 pt-4 text-center">
+                    <div class="text-[9px] font-bold text-zinc-600 uppercase tracking-widest">Production Sync Active</div>
+                </div>
+            </div>
+
+            <div class="flex-1 bg-[#1a1a1a] overflow-hidden relative no-drag">
+                
+                <div id="homeWorkspace" class="smooth-panel active-panel absolute inset-0 flex flex-col p-10 overflow-y-auto space-y-8">
+                    <div class="pt-3 pb-2">
+                        <h1 class="text-3xl font-bold text-zinc-100 tracking-tight">Good Day, Ahan</h1>
+                        <p class="text-xs text-indigo-400/90 mt-1.5 font-semibold tracking-wide">Workspace fully operational • All layouts balanced evenly</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-6 max-w-5xl">
+                        <div class="p-6 bg-[#222222] border border-white/5 rounded-2xl shadow-lg flex flex-col space-y-3">
+                            <div class="text-sm font-bold text-zinc-200 flex items-center space-x-2.5"><span>📝</span> <span>Word Document Canvas</span></div>
+                            <div class="text-xs text-zinc-400 font-medium leading-relaxed">Integrated structural cover banners, titles, and formatting controls. Supports all standard graphic buffers.</div>
+                        </div>
+                        <div class="p-6 bg-[#222222] border border-white/5 rounded-2xl shadow-lg flex flex-col space-y-3">
+                            <div class="text-sm font-bold text-zinc-200 flex items-center space-x-2.5"><span>💬</span> <span>Active Server Comms</span></div>
+                            <div class="text-xs text-zinc-400 font-medium leading-relaxed">Host localized server mesh rooms and communicate via high-fidelity secure streams instantly.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="docsWorkspace" class="smooth-panel hidden-panel absolute inset-0 flex flex-col">
+                    <div class="px-5 py-3 bg-[#222222] border-b border-white/5 flex items-center justify-between shrink-0">
+                        <div class="flex items-center space-x-2.5">
+                            <button onclick="switchDocumentTab('notes')" id="tab-notes" class="px-3.5 py-2 smooth-tab bg-blue-600 text-white rounded-xl text-xs font-semibold shadow-md">Personal Notes Canvas</button>
+                            <button onclick="switchDocumentTab('blueprint')" id="tab-blueprint" class="px-3.5 py-2 smooth-tab bg-[#2d2d2d] text-zinc-400 hover:text-zinc-200 rounded-xl text-xs font-semibold">Project Blueprint Workspace</button>
+                        </div>
+                        <button onclick="toggleCoverState()" id="coverTogglerBtn" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[11px] font-bold rounded-xl border border-white/10 shadow-sm transition">
+                            🖼️ Remove Cover Layout
+                        </button>
+                    </div>
+                    
+                    <div class="bg-[#1b1b1b] border-b border-white/5 px-5 py-2 flex items-center space-x-5 shrink-0 text-xs font-bold text-zinc-400">
+                        <button onclick="switchRibbonTab('home')" id="ribbon-tab-home" class="smooth-tab text-zinc-200 border-b-2 border-blue-500 pb-1">Home</button>
+                        <button onclick="switchRibbonTab('insert')" id="ribbon-tab-insert" class="smooth-tab hover:text-zinc-200 pb-1">Insert</button>
+                        <button onclick="switchRibbonTab('table')" id="ribbon-tab-table" class="smooth-tab hidden hover:text-zinc-200 pb-1">Table Format</button>
+                    </div>
+
+                    <div class="bg-[#222222] border-b border-white/5 px-5 py-4 min-h-[142px] shrink-0 relative overflow-hidden">
+                        <div id="ribbon-home-controls" class="smooth-tab opacity-100 absolute inset-0 px-5 py-3 flex flex-col gap-3">
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <select onchange="applyTextFormat('fontName', this.value)" class="bg-[#2e2e2e] border border-white/10 rounded-lg px-3 py-2 text-xs text-zinc-200 font-medium outline-none cursor-pointer"><option value="Arial">Arial</option><option value="Courier New">Courier</option><option value="Georgia">Georgia</option><option value="Times New Roman">Times</option></select>
+                                <select onchange="applyTextFormat('fontSize', this.value)" class="bg-[#2e2e2e] border border-white/10 rounded-lg px-3 py-2 text-xs text-zinc-200 font-medium outline-none cursor-pointer"><option value="3">12pt</option><option value="4">14pt</option><option value="5">18pt</option><option value="6">24pt</option></select>
+                                <div class="w-px h-5 bg-white/10 mx-1.5"></div>
+                                <button onclick="applyTextFormat('bold')" class="px-2.5 py-2 hover:bg-zinc-800 rounded font-bold text-xs text-zinc-300 min-w-7 transition">B</button>
+                                <button onclick="applyTextFormat('italic')" class="px-2.5 py-2 hover:bg-zinc-800 rounded italic text-xs text-zinc-300 min-w-7 transition">/</button>
+                                <button onclick="applyTextFormat('underline')" class="px-2.5 py-2 hover:bg-zinc-800 rounded underline text-xs text-zinc-300 min-w-7 transition">U</button>
+                                <div class="w-px h-5 bg-white/10 mx-1.5"></div>
+                                <button onclick="applyTextFormat('justifyLeft')" class="px-2.5 py-2 hover:bg-zinc-800 rounded text-[11px] font-medium text-zinc-300 transition">Align L</button>
+                                <button onclick="applyTextFormat('justifyCenter')" class="px-2.5 py-2 hover:bg-zinc-800 rounded text-[11px] font-medium text-zinc-300 transition">Center</button>
+                                <button onclick="applyTextFormat('justifyRight')" class="px-2.5 py-2 hover:bg-zinc-800 rounded text-[11px] font-medium text-zinc-300 transition">Align R</button>
+                            </div>
+                            <div class="flex items-center gap-3 flex-wrap rounded-xl border border-white/10 bg-[#1f1f1f] px-3 py-3">
+                                <div class="flex items-center gap-2">
+                                    <button type="button" onclick="applyRgbTextColor()" onmousedown="saveOfficeSelection()" class="relative h-12 w-12 rounded-full p-[3px] bg-[conic-gradient(#ff0000,#ff7a00,#ffe600,#42ff00,#00ffc8,#0066ff,#a100ff,#ff0000)] shadow-sm">
+                                        <span id="textColorPreview" class="block h-full w-full rounded-full border border-white/20" style="background:#3b82f6;"></span>
+                                        <input id="textColorPicker" type="color" value="#3b82f6" oninput="syncRgbInputsFromColor('text', this.value); applyRgbTextColor();" class="absolute inset-0 h-full w-full cursor-pointer opacity-0">
+                                    </button>
+                                    <div class="text-[10px] font-semibold text-zinc-400 text-center w-12">Text</div>
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="w-4 text-[10px] font-semibold text-zinc-500">R</span>
+                                        <input id="textRgbR" type="text" inputmode="numeric" maxlength="3" value="59" oninput="syncColorPickerFromRgb('text')" class="w-12 rounded-lg border border-white/10 bg-[#171717] px-2 py-1 text-center text-[10px] font-semibold text-zinc-200 outline-none focus:border-blue-500">
+                                        <span class="w-4 text-[10px] font-semibold text-zinc-500">G</span>
+                                        <input id="textRgbG" type="text" inputmode="numeric" maxlength="3" value="130" oninput="syncColorPickerFromRgb('text')" class="w-12 rounded-lg border border-white/10 bg-[#171717] px-2 py-1 text-center text-[10px] font-semibold text-zinc-200 outline-none focus:border-blue-500">
+                                        <span class="w-4 text-[10px] font-semibold text-zinc-500">B</span>
+                                        <input id="textRgbB" type="text" inputmode="numeric" maxlength="3" value="246" oninput="syncColorPickerFromRgb('text')" class="w-12 rounded-lg border border-white/10 bg-[#171717] px-2 py-1 text-center text-[10px] font-semibold text-zinc-200 outline-none focus:border-blue-500">
+                                    </div>
+                                </div>
+                                <button onclick="applyRgbTextColor()" onmousedown="saveOfficeSelection()" class="px-3 py-2 rounded-lg text-[10px] font-semibold bg-blue-600 text-white">Apply Text</button>
+
+                                <div class="w-px h-10 bg-white/10 mx-1.5"></div>
+
+                                <div class="flex items-center gap-2">
+                                    <button type="button" onclick="applyRgbHighlightColor()" onmousedown="saveOfficeSelection()" class="relative h-12 w-12 rounded-full p-[3px] bg-[conic-gradient(#ff0000,#ff7a00,#ffe600,#42ff00,#00ffc8,#0066ff,#a100ff,#ff0000)] shadow-sm">
+                                        <span id="highlightColorPreview" class="block h-full w-full rounded-full border border-white/20" style="background:#fef08a;"></span>
+                                        <input id="highlightColorPicker" type="color" value="#fef08a" oninput="syncRgbInputsFromColor('highlight', this.value); applyRgbHighlightColor();" class="absolute inset-0 h-full w-full cursor-pointer opacity-0">
+                                    </button>
+                                    <div class="text-[10px] font-semibold text-zinc-400 text-center w-12">Mark</div>
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="w-4 text-[10px] font-semibold text-zinc-500">R</span>
+                                        <input id="highlightRgbR" type="text" inputmode="numeric" maxlength="3" value="254" oninput="syncColorPickerFromRgb('highlight')" class="w-12 rounded-lg border border-white/10 bg-[#171717] px-2 py-1 text-center text-[10px] font-semibold text-zinc-200 outline-none focus:border-blue-500">
+                                        <span class="w-4 text-[10px] font-semibold text-zinc-500">G</span>
+                                        <input id="highlightRgbG" type="text" inputmode="numeric" maxlength="3" value="240" oninput="syncColorPickerFromRgb('highlight')" class="w-12 rounded-lg border border-white/10 bg-[#171717] px-2 py-1 text-center text-[10px] font-semibold text-zinc-200 outline-none focus:border-blue-500">
+                                        <span class="w-4 text-[10px] font-semibold text-zinc-500">B</span>
+                                        <input id="highlightRgbB" type="text" inputmode="numeric" maxlength="3" value="138" oninput="syncColorPickerFromRgb('highlight')" class="w-12 rounded-lg border border-white/10 bg-[#171717] px-2 py-1 text-center text-[10px] font-semibold text-zinc-200 outline-none focus:border-blue-500">
+                                    </div>
+                                </div>
+                                <button onclick="applyRgbHighlightColor()" onmousedown="saveOfficeSelection()" class="px-3 py-2 rounded-lg text-[10px] font-semibold bg-yellow-500 text-black">Apply Highlight</button>
+                            </div>
+                        </div>
+                        <div id="ribbon-insert-controls" class="smooth-tab opacity-0 pointer-events-none absolute top-2 bottom-2 left-5 right-5 flex items-center gap-2">
+                            <button onclick="insertDocumentElement('image')" class="px-3.5 py-1 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-xs font-semibold text-zinc-200 border border-white/5 transition">🖼️ Insert Image</button>
+                            <div class="relative">
+                                <button onclick="toggleTableInsertMenu(event)" class="px-3.5 py-1 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-xs font-semibold text-zinc-200 border border-white/5 transition">📊 Input Table</button>
+                                <div id="tableInsertMenu" class="hidden absolute left-0 top-full mt-2 z-50 w-[260px] rounded-2xl border border-white/10 bg-[#1d1d1d] shadow-2xl p-3">
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div class="space-y-1">
+                                            <div class="text-[10px] text-zinc-400 font-semibold uppercase tracking-wide">Rows</div>
+                                            <select id="tableRowCount" class="w-full bg-[#2b2b2b] border border-white/10 rounded-lg px-2.5 py-2 text-xs text-zinc-200 font-medium outline-none cursor-pointer">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3" selected>3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                            </select>
+                                        </div>
+                                        <div class="space-y-1">
+                                            <div class="text-[10px] text-zinc-400 font-semibold uppercase tracking-wide">Columns</div>
+                                            <select id="tableColumnCount" class="w-full bg-[#2b2b2b] border border-white/10 rounded-lg px-2.5 py-2 text-xs text-zinc-200 font-medium outline-none cursor-pointer">
+                                                <option value="1">1</option>
+                                                <option value="2" selected>2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button onclick="insertDocumentElement('table')" class="mt-3 w-full px-3.5 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-semibold text-white transition">Insert Table</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 bg-[#141414] p-8 overflow-y-auto flex justify-center relative">
+                        <div class="w-full max-w-4xl min-h-[650px] bg-white text-zinc-900 rounded-2xl p-14 shadow-xl flex flex-col space-y-6 border border-black/5 relative h-fit">
+                            
+                            <div class="w-full">
+                                <input type="text" id="currentDocumentTitleDisplay" class="text-3xl font-extrabold text-zinc-900 bg-transparent border-none outline-none w-full p-0 tracking-tight" value="Personal Notes Canvas" placeholder="Untitled Document">
+                            </div>
+                            
+                            <div id="coverBannerArea" class="smooth-tab w-full h-44 bg-gradient-to-r from-indigo-950 to-slate-900 rounded-xl overflow-hidden relative flex items-end justify-end p-3 group border border-black/10">
+                                <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <button class="px-3 py-1.5 bg-black/70 hover:bg-black/90 text-white rounded-lg text-[10px] font-bold border border-white/10 uppercase tracking-wider transition">📷 Change Cover Banner</button>
+                                </div>
+                            </div>
+
+                            <div id="officeContentCanvas" contenteditable="true" class="outline-none text-sm font-normal leading-relaxed text-zinc-800 flex-1 pt-2">
+                                Welcome back to your original, fully equipped workspace interface canvas. Drag tools, type layout streams, and manage assets natively inside this text body context.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="remindersWorkspace" class="smooth-panel hidden-panel absolute inset-0 flex flex-col p-8 space-y-6 overflow-hidden">
+                    <div class="pt-3 pb-2">
+                        <h1 class="text-2xl font-bold text-zinc-100 flex items-center space-x-2.5"><span>📋</span> <span>Finder Task Directory</span></h1>
+                        <p class="text-xs text-zinc-400 mt-1">System alerts loop instantly when deadline fields are hit.</p>
+                    </div>
+                    <div class="flex-1 grid grid-cols-3 gap-6 overflow-hidden pt-2">
+                        <div class="bg-[#222222] border border-white/5 rounded-2xl p-5 flex flex-col">
+                            <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-3 px-1">Directories</div>
+                            <div id="reminderDirectoryList" class="space-y-1.5 overflow-y-auto flex-1"></div>
+                            <div class="space-y-2 pt-3 border-t border-white/5">
+                                <input type="text" id="newReminderDirectoryInput" placeholder="Directory Name..." class="w-full bg-[#1c1c1c] border border-white/5 rounded-xl px-3.5 py-2.5 text-xs font-medium text-zinc-200 placeholder-zinc-500 outline-none focus:border-blue-500">
+                                <button onclick="createNewReminderDirectory()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition shadow-md">Create New Directory</button>
+                            </div>
+                        </div>
+                        <div class="bg-[#222222] border border-white/5 rounded-2xl p-5 flex flex-col space-y-4">
+                            <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider px-1">Tasks</div>
+                            <div id="taskListContainer" class="flex-1 overflow-y-auto space-y-2"></div>
+                            <div class="space-y-2 pt-2 border-t border-white/5">
+                                <input type="text" id="newTaskInput" placeholder="+ Add Task..." class="w-full bg-[#1c1c1c] border border-white/5 rounded-xl px-3.5 py-2.5 text-xs font-medium text-zinc-200 placeholder-zinc-500 outline-none focus:border-blue-500">
+                                <button onclick="addNewTaskNode()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition shadow-md">Insert Task Node</button>
+                            </div>
+                        </div>
+                        <div class="bg-[#222222] border border-white/5 rounded-2xl p-5 flex flex-col">
+                            <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-2 px-1">Task Configuration Inspectors</div>
+                            <div class="flex-1 flex flex-col space-y-3 overflow-y-auto">
+                                <div class="space-y-2">
+                                    <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider px-1">Title</div>
+                                    <input id="reminderTitleInput" type="text" oninput="updateSelectedReminderDraft()" class="w-full bg-[#1c1c1c] border border-white/5 rounded-xl px-3.5 py-2.5 text-xs font-medium text-zinc-200 outline-none focus:border-blue-500">
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider px-1">Deadline</div>
+                                    <input id="reminderDeadlineInput" type="datetime-local" oninput="updateSelectedReminderDraft()" class="w-full bg-[#1c1c1c] border border-white/5 rounded-xl px-3.5 py-2.5 text-xs font-medium text-zinc-200 outline-none focus:border-blue-500">
+                                </div>
+                                <div class="space-y-2 flex-1">
+                                    <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider px-1">Description</div>
+                                    <textarea id="reminderDescriptionInput" rows="7" oninput="updateSelectedReminderDraft()" class="w-full h-full min-h-36 resize-none bg-[#1c1c1c] border border-white/5 rounded-xl px-3.5 py-2.5 text-xs font-medium text-zinc-200 outline-none focus:border-blue-500"></textarea>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 pt-2">
+                                    <button onclick="createNewReminderNode()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition shadow-md">New Reminder</button>
+                                    <button onclick="deleteSelectedReminder()" class="w-full py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-xl text-xs font-bold transition shadow-md">Delete Selected</button>
+                                </div>
+                                <button onclick="saveReminderChanges()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition shadow-md">Save Reminder</button>
+                                <p id="reminderInspectorStatus" class="text-[10px] text-zinc-500 leading-relaxed italic px-1">Select a reminder in the middle column to edit title, deadline, and description.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="chatWorkspace" class="smooth-panel hidden-panel absolute inset-0 flex flex-col p-8 space-y-6 overflow-hidden">
+                    <div class="pt-3 pb-2">
+                        <h1 class="text-2xl font-bold text-zinc-100 flex items-center space-x-2.5"><span>💬</span> <span>Team Chat Core Servers</span></h1>
+                        <p class="text-xs text-zinc-400 mt-1">Establish encrypted chat nodes and sync channels across server keys.</p>
+                    </div>
+                    <div class="flex-1 grid grid-cols-3 gap-6 overflow-hidden pt-2">
+                        <div class="bg-[#222222] border border-white/5 rounded-2xl p-5 flex flex-col space-y-4">
+                            <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider px-1">Active Server List</div>
+                            <div id="serverListContainer" class="flex-1 overflow-y-auto space-y-1.5">
+                                <div class="p-3 bg-blue-600/15 border border-blue-500/20 text-blue-400 text-xs font-semibold rounded-xl flex items-center justify-between shadow-sm"><span>🧬 Global Mainframe Node</span> <button onclick="this.parentElement.remove()" class="text-[10px] opacity-40 hover:opacity-100">✕</button></div>
+                                <div class="p-3 bg-zinc-900/40 border border-white/5 text-zinc-400 text-xs font-medium rounded-xl flex items-center justify-between hover:text-zinc-200"><span>🧬 Project Sync Engine</span> <button onclick="this.parentElement.remove()" class="text-[10px] opacity-40 hover:opacity-100">✕</button></div>
+                            </div>
+                            <div class="space-y-2 pt-2 border-t border-white/5">
+                                <input type="text" id="newServerInput" placeholder="Server Name..." class="w-full bg-[#1c1c1c] border border-white/5 rounded-xl px-3.5 py-2.5 text-xs font-medium text-zinc-200 placeholder-zinc-500 outline-none">
+                                <button onclick="createNewServerNode()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition shadow-md">Create New Server</button>
+                            </div>
+                            <div class="bg-[#181818] border border-white/5 p-3.5 rounded-xl flex flex-col space-y-1">
+                                <div class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Your User Handle</div>
+                                <div class="text-xs font-bold text-zinc-300">Ahan_Developer</div>
+                            </div>
+                        </div>
+                        <div class="col-span-2 bg-[#222222] border border-white/5 rounded-2xl flex flex-col overflow-hidden relative shadow-lg">
+                            <div class="p-4 bg-[#2a2a2a] border-b border-white/5 px-5 flex items-center justify-between shrink-0">
+                                <span class="text-xs font-bold text-zinc-200">Global Mainframe Node</span>
+                                <button class="text-[10px] font-bold text-zinc-500 hover:text-zinc-300 flex items-center space-x-1.5"><span>📋</span> <span>Copy Server ID Key</span></button>
+                            </div>
+                            <div id="chatMessageLog" class="flex-1 p-5 overflow-y-auto space-y-4">
+                                <div class="p-3.5 bg-zinc-900/30 border border-white/5 rounded-xl text-xs leading-relaxed max-w-xl shadow-inner"><span class="font-bold text-blue-400">System:</span> Server stream initialized. Connect additional instances using the room key.</div>
+                            </div>
+                            <div class="p-4 bg-[#222222] border-t border-white/5 shrink-0">
+                                <input type="text" id="chatMessageInput" onkeydown="if(event.key==='Enter') sendLiveChatMessage()" placeholder="Type a message inside server room..." class="w-full bg-[#1c1c1c] border border-white/5 rounded-xl px-4 py-3 text-xs font-medium text-zinc-200 placeholder-zinc-500 outline-none focus:border-blue-500 shadow-inner">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { ipcRenderer, clipboard } = require('electron');
+        const views = ['home', 'docs', 'reminders', 'chat'];
+        const documentStateKey = 'apex-workspace-document-state';
+        const reminderStateKey = 'apex-workspace-reminders';
+        const serverIdKey = 'APEX-WS-001';
+
+        function generateReminderId() {
+            return `rem-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        }
+
+        function createReminder(title, deadline = '', description = '') {
+            return { id: generateReminderId(), title, deadline, description };
+        }
+
+        function defaultDocumentState(tabId) {
+            return tabId === 'notes'
+                ? {
+                    title: 'Personal Notes Canvas',
+                    body: 'Welcome back to your original, fully equipped workspace interface canvas. Drag tools, type layout streams, and manage assets natively inside this text body context.',
+                    coverVisible: true
+                }
+                : {
+                    title: 'Project Blueprint Workspace',
+                    body: 'Project Blueprint Engine parameters initialized. Build production pipelines cleanly.',
+                    coverVisible: true
+                };
+        }
+
+        function defaultReminderState() {
+            return {
+                'Work Tasks': [
+                    createReminder('Compile clean production app builds', '', 'Check bundle health and packaging output before release.'),
+                    createReminder('Verify reminder notifications', '', 'Confirm notification delivery from the reminder inspector.'),
+                    createReminder('Review packaging output', '', 'Inspect the packaged app in Applications for regressions.')
+                ],
+                'Personal Goals': [
+                    createReminder('Plan the next feature pass', '', 'Outline the next iteration before coding.'),
+                    createReminder('Write release notes', '', 'Capture the user-facing changes clearly.'),
+                    createReminder('Back up workspace files', '', 'Protect the workspace before larger edits.')
+                ]
+            };
+        }
+
+        function readStoredJson(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                if (!raw) return fallback();
+                return JSON.parse(raw);
+            } catch {
+                return fallback();
+            }
+        }
+
+        function writeStoredJson(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch {
+            }
+        }
+
+        function syncReminderStateWithMain() {
+            ipcRenderer.send('sync-reminder-state', reminderState);
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#39;');
+        }
+
+        let documentState = readStoredJson(documentStateKey, () => ({
+            notes: defaultDocumentState('notes'),
+            blueprint: defaultDocumentState('blueprint')
+        }));
+        let reminderState = readStoredJson(reminderStateKey, defaultReminderState);
+        let currentViewIndex = 0;
+        let isSwiping = false;
+        let isCoverVisible = true;
+        let swipeDirection = 1;
+        let activeReminderDirectory = 'Work Tasks';
+        let selectedReminderId = null;
+        let currentDocumentTab = 'notes';
+        let isTableInsertMenuOpen = false;
+
+        // Central Console View Switch Engine
+        function switchView(viewName) {
+            if (views[currentViewIndex] === 'docs') {
+                persistCurrentDocumentState();
+            }
+            const nextViewIndex = views.indexOf(viewName);
+            swipeDirection = nextViewIndex >= currentViewIndex ? 1 : -1;
+            currentViewIndex = nextViewIndex;
+            views.forEach((v, i) => {
+                const panel = document.getElementById(v + 'Workspace');
+                const btn = document.getElementById('btn-' + v);
+                if (i === currentViewIndex) {
+                    panel.className = "smooth-panel active-panel absolute inset-0 flex flex-col";
+                    if(btn) btn.className = "w-full text-left px-3.5 py-3 rounded-xl text-xs font-medium bg-[#2a2a2a] text-white transition flex items-center space-x-3 shadow-sm";
+                } else {
+                    panel.className = "smooth-panel hidden-panel absolute inset-0 flex flex-col";
+                    if(btn) btn.className = "w-full text-left px-3.5 py-3 rounded-xl text-xs font-medium text-zinc-400 hover:bg-zinc-900/40 hover:text-zinc-200 transition flex items-center space-x-3";
+                }
+            });
+            if (viewName === 'docs') {
+                applyDocumentState(currentDocumentTab);
+            }
+        }
+
+        // Trackpad Swipe Gestures
+        window.addEventListener('wheel', e => {
+            if (isSwiping) return;
+            if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 18) {
+                isSwiping = true;
+                if (e.deltaX > 0 && currentViewIndex < views.length - 1) {
+                    switchView(views[currentViewIndex + 1]);
+                } else if (e.deltaX < 0 && currentViewIndex > 0) {
+                    switchView(views[currentViewIndex - 1]);
+                }
+                setTimeout(() => isSwiping = false, 450);
+            }
+        }, { passive: true });
+
+        // DYNAMIC CONTENTEDITABLE TEXT FORMATTING SYSTEM
+        let savedOfficeSelectionRange = null;
+
+        function saveOfficeSelection() {
+            const canvas = document.getElementById('officeContentCanvas');
+            const selection = window.getSelection();
+            if (!canvas || !selection || selection.rangeCount === 0) return;
+
+            const range = selection.getRangeAt(0);
+            const container = range.commonAncestorContainer;
+            if (!canvas.contains(container)) return;
+
+            savedOfficeSelectionRange = range.cloneRange();
+        }
+
+        function restoreOfficeSelection() {
+            const canvas = document.getElementById('officeContentCanvas');
+            const selection = window.getSelection();
+            if (!canvas || !selection || !savedOfficeSelectionRange) return false;
+
+            selection.removeAllRanges();
+            selection.addRange(savedOfficeSelectionRange);
+            canvas.focus();
+            return true;
+        }
+
+        function applyTextFormat(command, value = null) {
+            restoreOfficeSelection();
+            document.execCommand(command, false, value);
+            document.getElementById('officeContentCanvas').focus();
+            saveOfficeSelection();
+        }
+
+        function rgbToHex(red, green, blue) {
+            const toHex = (value) => Number(value).toString(16).padStart(2, '0');
+            return `#${toHex(red)}${toHex(green)}${toHex(blue)}`;
+        }
+
+        function hexToRgb(hexValue) {
+            const normalized = `${hexValue || ''}`.trim().replace('#', '');
+            if (normalized.length !== 6) return [0, 0, 0];
+            const red = parseInt(normalized.slice(0, 2), 16);
+            const green = parseInt(normalized.slice(2, 4), 16);
+            const blue = parseInt(normalized.slice(4, 6), 16);
+            return [red, green, blue].map((value) => (Number.isFinite(value) ? value : 0));
+        }
+
+        function clampRgbInput(value, fallback = 0) {
+            const parsed = parseInt(value, 10);
+            if (!Number.isFinite(parsed)) return fallback;
+            return Math.max(0, Math.min(255, parsed));
+        }
+
+        function updateColorPreview(kind, hexValue) {
+            const preview = document.getElementById(kind === 'text' ? 'textColorPreview' : 'highlightColorPreview');
+            const picker = document.getElementById(kind === 'text' ? 'textColorPicker' : 'highlightColorPicker');
+            if (preview) preview.style.background = hexValue;
+            if (picker && picker.value !== hexValue) picker.value = hexValue;
+        }
+
+        function syncRgbInputsFromColor(kind, hexValue) {
+            const [red, green, blue] = hexToRgb(hexValue);
+            const redInput = document.getElementById(kind === 'text' ? 'textRgbR' : 'highlightRgbR');
+            const greenInput = document.getElementById(kind === 'text' ? 'textRgbG' : 'highlightRgbG');
+            const blueInput = document.getElementById(kind === 'text' ? 'textRgbB' : 'highlightRgbB');
+            if (redInput) redInput.value = red;
+            if (greenInput) greenInput.value = green;
+            if (blueInput) blueInput.value = blue;
+            updateColorPreview(kind, hexValue);
+        }
+
+        function syncColorPickerFromRgb(kind) {
+            const redInput = document.getElementById(kind === 'text' ? 'textRgbR' : 'highlightRgbR');
+            const greenInput = document.getElementById(kind === 'text' ? 'textRgbG' : 'highlightRgbG');
+            const blueInput = document.getElementById(kind === 'text' ? 'textRgbB' : 'highlightRgbB');
+            const red = clampRgbInput(redInput ? redInput.value : 0);
+            const green = clampRgbInput(greenInput ? greenInput.value : 0);
+            const blue = clampRgbInput(blueInput ? blueInput.value : 0);
+            const hexValue = rgbToHex(red, green, blue);
+            updateColorPreview(kind, hexValue);
+            if (redInput) redInput.value = red;
+            if (greenInput) greenInput.value = green;
+            if (blueInput) blueInput.value = blue;
+        }
+
+        function applyRgbTextColor() {
+            const red = clampRgbInput(document.getElementById('textRgbR')?.value, 59);
+            const green = clampRgbInput(document.getElementById('textRgbG')?.value, 130);
+            const blue = clampRgbInput(document.getElementById('textRgbB')?.value, 246);
+            const hexValue = rgbToHex(red, green, blue);
+            syncRgbInputsFromColor('text', hexValue);
+            restoreOfficeSelection();
+            applyTextFormat('foreColor', hexValue);
+        }
+
+        function applyRgbHighlightColor() {
+            const red = clampRgbInput(document.getElementById('highlightRgbR')?.value, 254);
+            const green = clampRgbInput(document.getElementById('highlightRgbG')?.value, 240);
+            const blue = clampRgbInput(document.getElementById('highlightRgbB')?.value, 138);
+            const hexValue = rgbToHex(red, green, blue);
+            syncRgbInputsFromColor('highlight', hexValue);
+            restoreOfficeSelection();
+            applyTextFormat('hiliteColor', hexValue);
+        }
+
+        function createHiddenImagePicker(acceptMultiple = false) {
+            const picker = document.createElement('input');
+            picker.type = 'file';
+            picker.accept = 'image/*,.png,.jpg,.jpeg,.gif,.webp,.bmp,.svg,.tif,.tiff,.heic,.heif';
+            picker.style.display = 'none';
+            picker.multiple = acceptMultiple;
+            document.body.appendChild(picker);
+            return picker;
+        }
+
+        function readImageFile(file, onLoad) {
+            const reader = new FileReader();
+            reader.onload = () => onLoad(reader.result);
+            reader.readAsDataURL(file);
+        }
+
+        function applyImageAsCoverBanner(dataUrl) {
+            const banner = document.getElementById('coverBannerArea');
+            banner.style.backgroundImage = `linear-gradient(rgba(15, 23, 42, 0.35), rgba(15, 23, 42, 0.35)), url("${dataUrl}")`;
+            banner.style.backgroundSize = 'cover';
+            banner.style.backgroundPosition = 'center';
+            banner.style.backgroundRepeat = 'no-repeat';
+            sendReminderNotification('Cover Banner Updated', 'A local image has been applied to the cover banner.');
+        }
+
+        function insertLocalImageIntoDocument() {
+            const picker = createHiddenImagePicker(true);
+            picker.addEventListener('change', () => {
+                const files = Array.from(picker.files || []);
+                if (!files.length) {
+                    picker.remove();
+                    return;
+                }
+                const canvas = document.getElementById('officeContentCanvas');
+                let remaining = files.length;
+                files.forEach((file) => {
+                    readImageFile(file, (dataUrl) => {
+                        const imageHtml = `<div class="my-4 rounded-xl overflow-hidden border border-zinc-200 shadow-sm" contenteditable="false"><img src="${dataUrl}" alt="${escapeHtml(file.name || 'Inserted asset')}" class="w-full h-auto block"></div><p><br></p>`;
+                        canvas.focus();
+                        document.execCommand('insertHTML', false, imageHtml);
+                        remaining -= 1;
+                        if (remaining === 0) {
+                            picker.remove();
+                            sendReminderNotification('Image Inserted', 'Local image files were inserted into the document canvas.');
+                        }
+                    });
+                });
+            }, { once: true });
+            picker.click();
+        }
+
+        function captureDocumentStateFromDom(tabId) {
+            const titleInput = document.getElementById('currentDocumentTitleDisplay');
+            const canvas = document.getElementById('officeContentCanvas');
+            return {
+                title: titleInput ? titleInput.value : defaultDocumentState(tabId).title,
+                body: canvas ? canvas.innerHTML : defaultDocumentState(tabId).body,
+                coverVisible: isCoverVisible
+            };
+        }
+
+        function applyDocumentState(tabId) {
+            if (!documentState[tabId]) {
+                documentState[tabId] = defaultDocumentState(tabId);
+            }
+
+            const state = documentState[tabId];
+            const titleInput = document.getElementById('currentDocumentTitleDisplay');
+            const canvas = document.getElementById('officeContentCanvas');
+            const banner = document.getElementById('coverBannerArea');
+            const btn = document.getElementById('coverTogglerBtn');
+
+            currentDocumentTab = tabId;
+            isCoverVisible = state.coverVisible !== false;
+
+            if (titleInput) titleInput.value = state.title;
+            if (canvas) canvas.innerHTML = state.body;
+            if (banner) banner.style.display = isCoverVisible ? 'flex' : 'none';
+            if (btn) btn.innerHTML = isCoverVisible ? '🖼️ Remove Cover Layout' : '🖼️ Add Cover Layout';
+        }
+
+        function persistCurrentDocumentState() {
+            documentState[currentDocumentTab] = captureDocumentStateFromDom(currentDocumentTab);
+            writeStoredJson(documentStateKey, documentState);
+        }
+
+        function getReminderBucket(directoryName = activeReminderDirectory) {
+            if (!reminderState[directoryName]) {
+                reminderState[directoryName] = [];
+            }
+            return reminderState[directoryName];
+        }
+
+        function getReminderDirectoryNames() {
+            return Object.keys(reminderState);
+        }
+
+        function persistReminderState() {
+            writeStoredJson(reminderStateKey, reminderState);
+            syncReminderStateWithMain();
+        }
+
+        function getSelectedReminder() {
+            return getReminderBucket().find((reminder) => reminder.id === selectedReminderId) || null;
+        }
+
+        function updateReminderDirectoryButtons() {
+            const container = document.getElementById('reminderDirectoryList');
+            if (!container) return;
+
+            const directories = getReminderDirectoryNames();
+            container.innerHTML = '';
+
+            directories.forEach((directoryName) => {
+                const button = document.createElement('button');
+                const isActive = directoryName === activeReminderDirectory;
+                button.type = 'button';
+                button.onclick = () => selectReminderDirectory(directoryName);
+                button.className = isActive
+                    ? 'w-full text-left text-xs font-semibold p-3 rounded-xl bg-blue-600/15 text-blue-400 border border-blue-500/10 flex items-center justify-between'
+                    : 'w-full text-left text-xs font-medium p-3 rounded-xl text-zinc-400 hover:bg-zinc-900/50 flex items-center justify-between';
+                button.innerHTML = `<span>📁 ${escapeHtml(directoryName)}</span> <span>▶</span>`;
+                container.appendChild(button);
+            });
+        }
+
+        function renderReminderList() {
+            const container = document.getElementById('taskListContainer');
+            const reminders = getReminderBucket();
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            if (!reminders.length) {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'p-3 rounded-xl border border-dashed border-white/10 text-[11px] text-zinc-500';
+                emptyState.textContent = 'No reminders yet. Add one below to start customizing it.';
+                container.appendChild(emptyState);
+                return;
+            }
+
+            reminders.forEach((reminder) => {
+                const button = document.createElement('button');
+                const isSelected = reminder.id === selectedReminderId;
+                button.type = 'button';
+                button.onclick = () => selectReminderItem(reminder.id);
+                button.className = isSelected
+                    ? 'w-full text-left p-3 rounded-xl bg-blue-600/15 text-blue-200 border border-blue-500/20 flex items-start justify-between gap-3'
+                    : 'w-full text-left p-3 rounded-xl bg-[#2a2a2a] text-zinc-300 border border-white/5 flex items-start justify-between gap-3 hover:bg-[#303030] transition';
+
+                button.innerHTML = `
+                    <div class="min-w-0 space-y-1">
+                        <div class="flex items-center space-x-2.5">
+                            <span>📋</span>
+                            <span class="font-semibold truncate">${escapeHtml(reminder.title || 'Untitled Reminder')}</span>
+                        </div>
+                        <div class="text-[10px] text-zinc-500 break-words">${escapeHtml(reminder.description || 'No description yet')}</div>
+                    </div>
+                    <div class="shrink-0 text-[10px] text-zinc-500 text-right space-y-2">
+                        <div>${reminder.deadline ? escapeHtml(reminder.deadline) : 'No deadline'}</div>
+                        <button type="button" onclick="removeTaskNode(this, '${reminder.id}'); event.stopPropagation();" class="text-zinc-500 hover:text-red-400">✕</button>
+                    </div>
+                `;
+                container.appendChild(button);
+            });
+        }
+
+        function syncReminderEditor() {
+            const selectedReminder = getSelectedReminder();
+            const titleInput = document.getElementById('reminderTitleInput');
+            const deadlineInput = document.getElementById('reminderDeadlineInput');
+            const descriptionInput = document.getElementById('reminderDescriptionInput');
+            const status = document.getElementById('reminderInspectorStatus');
+
+            if (!titleInput || !deadlineInput || !descriptionInput || !status) return;
+
+            if (!selectedReminder) {
+                titleInput.value = '';
+                deadlineInput.value = '';
+                descriptionInput.value = '';
+                status.textContent = 'Select a reminder in the middle column to edit title, deadline, and description.';
+                return;
+            }
+
+            titleInput.value = selectedReminder.title || '';
+            deadlineInput.value = selectedReminder.deadline || '';
+            descriptionInput.value = selectedReminder.description || '';
+            status.textContent = `Editing ${selectedReminder.title || 'untitled reminder'} in ${activeReminderDirectory}.`;
+        }
+
+        function renderReminderDirectory(directoryName) {
+            if (!reminderState[directoryName]) {
+                reminderState[directoryName] = [];
+            }
+            activeReminderDirectory = directoryName;
+            const reminders = getReminderBucket(directoryName);
+            selectedReminderId = reminders[0] ? reminders[0].id : null;
+            updateReminderDirectoryButtons();
+            renderReminderList();
+            syncReminderEditor();
+        }
+
+        function createNewReminderDirectory() {
+            const input = document.getElementById('newReminderDirectoryInput');
+            const directoryName = input && input.value.trim() ? input.value.trim() : '';
+            if (!directoryName || reminderState[directoryName]) return;
+
+            reminderState[directoryName] = [];
+            if (input) input.value = '';
+            persistReminderState();
+            renderReminderDirectory(directoryName);
+            sendReminderNotification('Reminder Directory Added', `${directoryName} is ready for new reminders.`);
+        }
+
+        function updateSelectedReminderDraft() {
+            const reminder = getSelectedReminder();
+            if (!reminder) return;
+
+            const titleInput = document.getElementById('reminderTitleInput');
+            const deadlineInput = document.getElementById('reminderDeadlineInput');
+            const descriptionInput = document.getElementById('reminderDescriptionInput');
+
+            reminder.title = titleInput ? titleInput.value.trim() || 'Untitled Reminder' : reminder.title;
+            reminder.deadline = deadlineInput ? deadlineInput.value : reminder.deadline;
+            reminder.description = descriptionInput ? descriptionInput.value : reminder.description;
+            persistReminderState();
+            renderReminderList();
+        }
+
+        function saveReminderChanges() {
+            updateSelectedReminderDraft();
+            const reminder = getSelectedReminder();
+            if (reminder) {
+                sendReminderNotification('Reminder Saved', `${reminder.title} has been updated.`);
+            }
+        }
+
+        function selectReminderItem(reminderId) {
+            selectedReminderId = reminderId;
+            renderReminderList();
+            syncReminderEditor();
+        }
+
+        function createNewReminderNode() {
+            const input = document.getElementById('newTaskInput');
+            const title = input && input.value.trim() ? input.value.trim() : 'New Reminder';
+            const reminder = createReminder(title, '', '');
+            getReminderBucket().unshift(reminder);
+            selectedReminderId = reminder.id;
+            if (input) input.value = '';
+            persistReminderState();
+            renderReminderList();
+            syncReminderEditor();
+            sendReminderNotification('Reminder Added', `${title} was added to ${activeReminderDirectory}.`);
+        }
+
+        function deleteSelectedReminder() {
+            const reminders = getReminderBucket();
+            const index = reminders.findIndex((reminder) => reminder.id === selectedReminderId);
+            if (index === -1) return;
+
+            const [removed] = reminders.splice(index, 1);
+            selectedReminderId = reminders[0] ? reminders[0].id : null;
+            persistReminderState();
+            renderReminderList();
+            syncReminderEditor();
+            sendReminderNotification('Reminder Removed', `${removed.title} was deleted from ${activeReminderDirectory}.`);
+        }
+
+        // OBJECT ELEMENT INSERTION ENGINE
+        function insertDocumentElement(type) {
+            let elementHtml = '';
+
+            if (type === 'image') {
+                insertLocalImageIntoDocument();
+                return;
+            } else if (type === 'table') {
+                const rowCount = Math.max(1, parseInt(document.getElementById('tableRowCount').value || '3', 10));
+                const columnCount = Math.max(1, parseInt(document.getElementById('tableColumnCount').value || '2', 10));
+                const headerCells = Array.from({ length: columnCount }, (_, index) => `<th class="p-2.5 font-bold" contenteditable="true" spellcheck="false">Column ${index + 1}</th>`).join('');
+                const rows = Array.from({ length: rowCount }, (_, rowIndex) => {
+                    const cells = Array.from({ length: columnCount }, (_, columnIndex) => `<td class="p-2.5" contenteditable="true">R${rowIndex + 1}C${columnIndex + 1}</td>`).join('');
+                    return `<tr class="${rowIndex < rowCount - 1 ? 'border-b border-zinc-100' : ''}">${cells}</tr>`;
+                }).join('');
+                elementHtml = `<div class="my-4 overflow-hidden border border-zinc-200 rounded-lg shadow-sm" contenteditable="false">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-zinc-100 border-b border-zinc-200">${headerCells}</tr>
+                        </thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div><p><br></p>`;
+                closeTableInsertMenu();
+            }
+
+            const canvas = document.getElementById('officeContentCanvas');
+            canvas.focus();
+            if (elementHtml) {
+                document.execCommand('insertHTML', false, elementHtml);
+            }
+        }
+
+        // TASK MANAGER FUNCTIONALITY
+        function addNewTaskNode() {
+            createNewReminderNode();
+        }
+
+        function removeTaskNode(button, reminderId) {
+            const reminders = getReminderBucket();
+            const index = reminders.findIndex((reminder) => reminder.id === reminderId);
+            if (index === -1) return;
+
+            const [removed] = reminders.splice(index, 1);
+            if (selectedReminderId === reminderId) {
+                selectedReminderId = reminders[0] ? reminders[0].id : null;
+            }
+            persistReminderState();
+            renderReminderList();
+            syncReminderEditor();
+            sendReminderNotification('Reminder Removed', `${removed.title} was removed from the reminder list.`);
+        }
+
+        function selectReminderDirectory(directoryName) {
+            renderReminderDirectory(directoryName);
+            sendReminderNotification('Reminder Directory', `${directoryName} is now selected.`);
+        }
+
+        // SERVER CHAT SIMULATOR ENGINE
+        function createNewServerNode() {
+            const input = document.getElementById('newServerInput');
+            if(!input.value.trim()) return;
+            const container = document.getElementById('serverListContainer');
+            const element = document.createElement('div');
+            element.className = "p-3 bg-zinc-900/40 border border-white/5 text-zinc-400 text-xs font-medium rounded-xl flex items-center justify-between hover:text-zinc-200 cursor-pointer";
+            element.innerHTML = `<span>🧬 ${input.value}</span> <button onclick="this.parentElement.remove()" class="text-[10px] opacity-40 hover:opacity-100">✕</button>`;
+            container.appendChild(element);
+            input.value = '';
+        }
+
+        function sendLiveChatMessage() {
+            const input = document.getElementById('chatMessageInput');
+            if(!input.value.trim()) return;
+            const log = document.getElementById('chatMessageLog');
+            const element = document.createElement('div');
+            element.className = "p-3.5 bg-[#2a2a2a] border border-white/5 rounded-xl text-xs leading-relaxed max-w-xl shadow-md self-end ml-auto";
+            element.innerHTML = `<span class="font-bold text-purple-400">Ahan_Developer:</span> ${input.value}`;
+            log.appendChild(element);
+            log.scrollTop = log.scrollHeight;
+            input.value = '';
+        }
+
+        // Document Cover Toggler Engine
+        function toggleCoverState() {
+            const banner = document.getElementById('coverBannerArea');
+            const btn = document.getElementById('coverTogglerBtn');
+            isCoverVisible = !isCoverVisible;
+            documentState[currentDocumentTab].coverVisible = isCoverVisible;
+            writeStoredJson(documentStateKey, documentState);
+            
+            if (isCoverVisible) {
+                banner.style.display = 'flex';
+                btn.innerHTML = '🖼️ Remove Cover Layout';
+            } else {
+                banner.style.display = 'none';
+                btn.innerHTML = '🖼️ Add Cover Layout';
+            }
+        }
+
+        // Document Tab Toggles
+        function switchDocumentTab(docId) {
+            persistCurrentDocumentState();
+            const btnNotes = document.getElementById('tab-notes');
+            const btnBlueprint = document.getElementById('tab-blueprint');
+
+            if(docId === 'notes') {
+                btnNotes.className = "px-3.5 py-2 smooth-tab bg-blue-600 text-white rounded-xl text-xs font-semibold shadow-md";
+                btnBlueprint.className = "px-3.5 py-2 smooth-tab bg-[#2d2d2d] text-zinc-400 hover:text-zinc-200 rounded-xl text-xs font-semibold";
+            } else {
+                btnNotes.className = "px-3.5 py-2 smooth-tab bg-[#2d2d2d] text-zinc-400 hover:text-zinc-200 rounded-xl text-xs font-semibold";
+                btnBlueprint.className = "px-3.5 py-2 smooth-tab bg-blue-600 text-white rounded-xl text-xs font-semibold shadow-md";
+            }
+            applyDocumentState(docId);
+        }
+
+        // Office Ribbon Smooth Cross-Fades
+        function switchRibbonTab(tabName) {
+            const homeTab = document.getElementById('ribbon-tab-home');
+            const insertTab = document.getElementById('ribbon-tab-insert');
+            const homeControls = document.getElementById('ribbon-home-controls');
+            const insertControls = document.getElementById('ribbon-insert-controls');
+
+            if(tabName === 'home') {
+                homeTab.className = "smooth-tab text-zinc-200 border-b-2 border-blue-500 pb-1";
+                insertTab.className = "smooth-tab hover:text-zinc-200 pb-1";
+                
+                insertControls.style.opacity = '0';
+                insertControls.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    homeControls.style.opacity = '1';
+                    homeControls.style.pointerEvents = 'auto';
+                }, 150);
+            } else {
+                insertTab.className = "smooth-tab text-zinc-200 border-b-2 border-blue-500 pb-1";
+                homeTab.className = "smooth-tab hover:text-zinc-200 pb-1";
+                
+                homeControls.style.opacity = '0';
+                homeControls.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    insertControls.style.opacity = '1';
+                    insertControls.style.pointerEvents = 'auto';
+                }, 150);
+            }
+        }
+
+        function triggerTestNotification() {
+            ipcRenderer.send('trigger-test-notification');
+        }
+
+        function sendReminderNotification(title, body) {
+            ipcRenderer.send('show-reminder-notification', { title, body });
+        }
+
+        document.addEventListener('selectionchange', saveOfficeSelection);
+        document.getElementById('officeContentCanvas').addEventListener('mouseup', saveOfficeSelection);
+        document.getElementById('officeContentCanvas').addEventListener('keyup', saveOfficeSelection);
+        document.getElementById('officeContentCanvas').addEventListener('focus', saveOfficeSelection);
+        document.getElementById('currentDocumentTitleDisplay').addEventListener('input', persistCurrentDocumentState);
+        document.getElementById('officeContentCanvas').addEventListener('input', persistCurrentDocumentState);
+        syncRgbInputsFromColor('text', document.getElementById('textColorPicker').value);
+        syncRgbInputsFromColor('highlight', document.getElementById('highlightColorPicker').value);
+        applyDocumentState(currentDocumentTab);
+        renderReminderDirectory(activeReminderDirectory);
+        syncReminderStateWithMain();
+
+        function closeTableInsertMenu() {
+            const menu = document.getElementById('tableInsertMenu');
+            if (!menu) return;
+            menu.classList.add('hidden');
+            isTableInsertMenuOpen = false;
+        }
+
+        function toggleTableInsertMenu(event) {
+            if (event) event.stopPropagation();
+            const menu = document.getElementById('tableInsertMenu');
+            if (!menu) return;
+            isTableInsertMenuOpen = !isTableInsertMenuOpen;
+            menu.classList.toggle('hidden', !isTableInsertMenuOpen);
+        }
+
+        document.addEventListener('click', (event) => {
+            const menu = document.getElementById('tableInsertMenu');
+            if (!menu || menu.classList.contains('hidden')) return;
+            if (menu.contains(event.target)) return;
+            if (event.target.closest && event.target.closest('button[onclick="toggleTableInsertMenu(event)"]')) return;
+            closeTableInsertMenu();
+        });
+    </script>
+</body>
+</html>

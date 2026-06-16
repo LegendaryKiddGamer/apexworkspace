@@ -1,0 +1,27 @@
+{
+  "name": "ApexWorkspace",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.legendarykiddgamer.apexworkspace",
+    "productName": "ApexWorkspace",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": ["dmg", "zip"]
+    },
+    "win": {
+      "target": ["nsis"]
+    },
+    "linux": {
+      "target": ["AppImage", "deb"]
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "LegendaryKiddGamer",
+      "repo": "apexworkspace"
+    }
+  }
+}
