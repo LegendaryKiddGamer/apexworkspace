@@ -87,9 +87,8 @@
                 <div id="homeWorkspace" class="smooth-panel active-panel absolute inset-0 flex flex-col p-10 overflow-y-auto space-y-8">
                     <div class="pt-3 pb-2">
                         <h1 class="text-3xl font-bold text-zinc-100 tracking-tight">Good Day, Ahan</h1>
-                        <p class="text-xs text-indigo-400/90 mt-1.5 font-semibold tracking-wide">Workspace fully operational • All layouts balanced evenly</p>
                     </div>
-                    <div class="grid grid-cols-2 gap-6 max-w-5xl">
+                    <div class="grid grid-cols-2 gap-6 max-w-5xl ml-6">
                         <div class="p-6 bg-[#222222] border border-white/5 rounded-2xl shadow-lg flex flex-col space-y-3">
                             <div class="text-sm font-bold text-zinc-200 flex items-center space-x-2.5"><span>📝</span> <span>Word Document Canvas</span></div>
                             <div class="text-xs text-zinc-400 font-medium leading-relaxed">Integrated structural cover banners, titles, and formatting controls. Supports all standard graphic buffers.</div>
@@ -486,6 +485,7 @@
             saveOfficeSelection();
         }
 
+        // Color Management Helpers
         function rgbToHex(red, green, blue) {
             const toHex = (value) => Number(value).toString(16).padStart(2, '0');
             return `#${toHex(red)}${toHex(green)}${toHex(blue)}`;
@@ -558,6 +558,7 @@
             applyTextFormat('hiliteColor', hexValue);
         }
 
+        // File/Image Operations
         function createHiddenImagePicker(acceptMultiple = false) {
             const picker = document.createElement('input');
             picker.type = 'file';
@@ -609,6 +610,7 @@
             picker.click();
         }
 
+        // Document Management
         function captureDocumentStateFromDom(tabId) {
             const titleInput = document.getElementById('currentDocumentTitleDisplay');
             const canvas = document.getElementById('officeContentCanvas');
@@ -619,6 +621,7 @@
             };
         }
 
+        // Engine State Setters
         function applyDocumentState(tabId) {
             if (!documentState[tabId]) {
                 documentState[tabId] = defaultDocumentState(tabId);
@@ -644,6 +647,7 @@
             writeStoredJson(documentStateKey, documentState);
         }
 
+        // Task & Reminder State Containers
         function getReminderBucket(directoryName = activeReminderDirectory) {
             if (!reminderState[directoryName]) {
                 reminderState[directoryName] = [];
