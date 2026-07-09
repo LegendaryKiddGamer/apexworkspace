@@ -1,4 +1,4 @@
-name: Build and Publish Electron App
+name: Build App
 
 on:
   push:
@@ -7,15 +7,12 @@ on:
 
 jobs:
   release:
-    name: Build for ${{ matrix.os }}
+    name: Build and Release
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
-
-    permissions:
-      contents: write
+        os: [macos-latest, windows-latest]
 
     steps:
       - name: Check out git repository
@@ -25,11 +22,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm ci
 
-      - name: Build and Publish
-        run: npm run dist -- --win --publish always
+      - name: Build and Publish App
+        run: npm run build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
