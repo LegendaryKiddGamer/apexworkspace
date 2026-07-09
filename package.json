@@ -21,6 +21,9 @@
       "category": "public.app-category.productivity",
       "target": ["dmg", "zip"]
     },
+    "win": {
+      "target": ["nsis"]
+    },
     "publish": {
       "provider": "github",
       "owner": "LegendaryKiddGamer",
