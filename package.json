@@ -1,33 +1,34 @@
 {
-  "name": "apexworkspace",
-  "version": "1.0.0",
-  "description": "Desktop workspace application with document editing and notifications",
+  "name": "apex-workspace-app",
+  "version": "1.0.6",
+  "description": "Apex Workspace Application",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
-  "author": "Ahan Jadhav",
-  "license": "ISC",
+  "dependencies": {
+    "electron-updater": "^6.1.7"
+  },
   "devDependencies": {
     "electron": "^30.0.0",
     "electron-builder": "^24.13.3"
   },
   "build": {
-    "appId": "com.legendarykiddgamer.apexworkspace",
-    "productName": "ApexWorkspace",
+    "appId": "com.apex.workspace",
     "mac": {
-      "category": "public.app-category.productivity",
+      "category": "public.app-category.utilities",
       "target": ["dmg", "zip"]
     },
     "win": {
       "target": ["nsis"]
     },
+    "directories": {
+      "output": "dist"
+    },
     "publish": {
-      "provider": "github",
-      "owner": "LegendaryKiddGamer",
-      "repo": "apexworkspace"
+      "provider": "github"
     }
   }
 }
