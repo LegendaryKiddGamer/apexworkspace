@@ -26,6 +26,90 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+
+        /* --- Apex Chat System Styles --- */
+        .chat-wrapper {
+          background: #1e1e24;
+          border: 1px solid #2a2a35;
+          border-radius: 12px;
+          margin-top: 20px;
+          overflow: hidden;
+        }
+        .chat-header-panel {
+          background: #2a2a35;
+          padding: 15px 20px;
+          border-bottom: 1px solid #3a3a4a;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .my-code-badge {
+          background: #007acc;
+          color: white;
+          padding: 4px 10px;
+          border-radius: 6px;
+          font-family: monospace;
+          font-weight: bold;
+        }
+        .chat-connect-row {
+          display: flex;
+          gap: 10px;
+          padding: 15px 20px;
+          background: #23232a;
+        }
+        .chat-connect-row input, .chat-input-row input {
+          flex: 1;
+          background: #121214;
+          border: 1px solid #3a3a4a;
+          padding: 10px;
+          border-radius: 6px;
+          color: white;
+        }
+        .chat-connect-row button, .chat-input-row button {
+          background: #007acc;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-weight: bold;
+        }
+        .chat-connect-row button:disabled, .chat-input-row button:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+        .chat-display-box {
+          background: #121214;
+          height: 300px;
+          overflow-y: auto;
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+        .chat-msg {
+          max-width: 70%;
+          padding: 10px 14px;
+          border-radius: 8px;
+          line-height: 1.4;
+        }
+        .chat-msg.me {
+          background: #007acc;
+          color: white;
+          align-self: flex-end;
+        }
+        .chat-msg.them {
+          background: #2a2a35;
+          color: #e1e1e6;
+          align-self: flex-start;
+        }
+        .chat-input-row {
+          display: flex;
+          gap: 10px;
+          padding: 15px 20px;
+          background: #1e1e24;
+          border-top: 1px solid #2a2a35;
+        }
     </style>
 </head>
 <body class="bg-[#161616] text-zinc-100 font-sans select-none overflow-hidden h-screen flex flex-col p-4">
@@ -312,12 +396,27 @@
                                 <span class="text-xs font-bold text-zinc-200">Global Mainframe Node</span>
                                 <button class="text-[10px] font-bold text-zinc-500 hover:text-zinc-300 flex items-center space-x-1.5"><span>📋</span> <span>Copy Server ID Key</span></button>
                             </div>
-                            <div id="chatMessageLog" class="flex-1 p-5 overflow-y-auto space-y-4">
-                                <div class="p-3.5 bg-zinc-900/30 border border-white/5 rounded-xl text-xs leading-relaxed max-w-xl shadow-inner"><span class="font-bold text-blue-400">System:</span> Server stream initialized. Connect additional instances using the room key.</div>
+                            
+                            <div class="chat-wrapper">
+                              <div class="chat-header-panel">
+                                <h3>Apex Live Chat</h3>
+                                <div>Your Code: <span id="my-code" class="my-code-badge">------</span></div>
+                              </div>
+                              
+                              <div class="chat-connect-row">
+                                <input type="text" id="target-code" placeholder="Enter remote 6-digit code" maxlength="6">
+                                <button id="connect-btn">Connect Device</button>
+                              </div>
+
+                              <div id="chat-box" class="chat-display-box">
+                                </div>
+
+                              <div class="chat-input-row">
+                                <input type="text" id="msg-input" placeholder="Connect to a device to start exchanging live data..." disabled>
+                                <button id="send-btn" disabled>Send</button>
+                              </div>
                             </div>
-                            <div class="p-4 bg-[#222222] border-t border-white/5 shrink-0">
-                                <input type="text" id="chatMessageInput" onkeydown="if(event.key==='Enter') sendLiveChatMessage()" placeholder="Type a message inside server room..." class="w-full bg-[#1c1c1c] border border-white/5 rounded-xl px-4 py-3 text-xs font-medium text-zinc-200 placeholder-zinc-500 outline-none focus:border-blue-500 shadow-inner">
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -805,32 +904,6 @@
             syncReminderEditor();
         }
 
-        function createNewReminderNode() {
-            const input = document.getElementById('newTaskInput');
-            const title = input && input.value.trim() ? input.value.trim() : 'New Reminder';
-            const reminder = createReminder(title, '', '');
-            getReminderBucket().unshift(reminder);
-            selectedReminderId = reminder.id;
-            if (input) input.value = '';
-            persistReminderState();
-            renderReminderList();
-            syncReminderEditor();
-            sendReminderNotification('Reminder Added', `${title} was added to ${activeReminderDirectory}.`);
-        }
-
-        function deleteSelectedReminder() {
-            const reminders = getReminderBucket();
-            const index = reminders.findIndex((reminder) => reminder.id === selectedReminderId);
-            if (index === -1) return;
-
-            const [removed] = reminders.splice(index, 1);
-            selectedReminderId = reminders[0] ? reminders[0].id : null;
-            persistReminderState();
-            renderReminderList();
-            syncReminderEditor();
-            sendReminderNotification('Reminder Removed', `${removed.title} was deleted from ${activeReminderDirectory}.`);
-        }
-
         // OBJECT ELEMENT INSERTION ENGINE
         function insertDocumentElement(type) {
             let elementHtml = '';
@@ -1019,5 +1092,6 @@
             closeTableInsertMenu();
         });
     </script>
+    <script type="module" src="renderer.js"></script>
 </body>
 </html>
