@@ -1,27 +1,24 @@
-name: Build App
+name: Build and Release Apex Workspace
 
 on:
   push:
-    tags:
-      - 'v*'
-
-permissions:
-  contents: write
+    branches:
+      - main
 
 jobs:
   release:
-    name: Build and Release
+    name: Build and Publish (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-
+    
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
 
     steps:
-      - name: Check out git repository
+      - name: Check out Git repository
         uses: actions/checkout@v4
 
-      - name: Install Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -30,8 +27,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build and Publish App
-        run: npm run dist
+      - name: Build and Publish Electron Package
+        run: npx electron-builder --publish always
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CSC_IDENTITY_AUTO_DISCOVERY: false
