@@ -1,6 +1,6 @@
 {
   "name": "apex-workspace-app",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Apex Workspace Application",
   "main": "main.js",
   "scripts": {
