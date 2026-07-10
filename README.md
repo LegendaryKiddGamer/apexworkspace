@@ -5,7 +5,7 @@ A desktop workspace application with document editing and notifications.
 ## How to Download and Install
 
 1. Go to the **Releases** section on the right side of this GitHub repository.
-2. Click on the **v1.0.0** tag version to open the asset list.
+2. Click on the **v1.0.13** tag version to open the asset list.
 3. Download the Mac installer file ending in `.dmg` (e.g., `ApexWorkspace-1.0.0-arm64.dmg`).
 4. Double-click the downloaded `.dmg` file and drag **ApexWorkspace** into your **Applications** folder.
 
