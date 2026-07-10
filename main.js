@@ -9,6 +9,7 @@ let reminderStateCache = {};
 let reminderScanInterval = null;
 let notifiedReminderKeys = new Set();
 
+// --- Notification Helpers ---
 function showDesktopNotification(title, body) {
     if (Notification.isSupported()) {
         new Notification({ title, body }).show();
@@ -26,6 +27,7 @@ function reminderKey(reminder) {
     return `${reminder.id || 'unknown'}::${reminder.deadline || ''}`;
 }
 
+// --- Reminder & Notification Engine ---
 function scanDueReminderNotifications(reminderState = reminderStateCache) {
     const now = Date.now();
 
@@ -90,6 +92,7 @@ function scheduleReminderNotifications(reminderState = {}) {
     }
 }
 
+// --- Window Management ---
 function createWorkspaceWindow() {
     mainWindow = new BrowserWindow({
         width: 1280,
@@ -98,23 +101,32 @@ function createWorkspaceWindow() {
         minHeight: 700,
         titleBarStyle: 'hiddenInset',
         backgroundColor: '#18181b',
+        show: false, // Prevent visual flash on startup
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
         }
     });
 
+    mainWindow.loadFile('index.html');
+
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show();
+    });
+
     mainWindow.on('close', (event) => {
         if (isQuitting) return;
         event.preventDefault();
         mainWindow.hide();
+        // Hide the macOS dock icon when window is closed to tray
+        if (process.platform === 'darwin' && app.dock) {
+            app.dock.hide();
+        }
     });
 
     mainWindow.on('closed', () => {
         mainWindow = null;
     });
-
-    mainWindow.loadFile('index.html');
 }
 
 function showWorkspaceWindow() {
@@ -123,30 +135,42 @@ function showWorkspaceWindow() {
         return;
     }
 
+    // Bring macOS dock icon back if it was hidden
+    if (process.platform === 'darwin' && app.dock) {
+        app.dock.show();
+    }
+
     if (mainWindow.isMinimized()) mainWindow.restore();
     mainWindow.show();
     mainWindow.focus();
 }
 
+// --- Tray Management ---
 function createTray() {
     const trayIconPath = path.join(__dirname, '..', 'electron.icns');
-    const trayIcon = nativeImage.createFromPath(trayIconPath);
+    let trayIcon = nativeImage.createFromPath(trayIconPath);
 
+    // Fallback if the custom .icns file is missing or invalid
     if (trayIcon.isEmpty()) {
-        return;
+        console.warn('Tray icon not found at path:', trayIconPath, '- Using fallback empty icon.');
+        trayIcon = nativeImage.createEmpty();
     }
 
     tray = new Tray(trayIcon);
     tray.setToolTip('Apex Workspace Matrix OS');
-    tray.setContextMenu(Menu.buildFromTemplate([
+    
+    const contextMenu = Menu.buildFromTemplate([
         { label: 'Show Apex Workspace', click: showWorkspaceWindow },
         { label: 'Test Notification', click: () => showDesktopNotification('Apex Diagnostic Channel', 'Desktop notifications layer successfully verified!') },
         { type: 'separator' },
         { label: 'Quit', click: () => { isQuitting = true; app.quit(); } }
-    ]));
+    ]);
+
+    tray.setContextMenu(contextMenu);
     tray.on('click', showWorkspaceWindow);
 }
 
+// --- App Lifecycle ---
 app.whenReady().then(() => {
     createWorkspaceWindow();
     createTray();
@@ -166,6 +190,7 @@ app.on('before-quit', () => {
     clearReminderTimers();
 });
 
+// --- IPC Channels ---
 ipcMain.on('trigger-test-notification', (event) => {
     showDesktopNotification('Apex Diagnostic Channel', 'Desktop notifications layer successfully verified!');
 });
