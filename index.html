@@ -408,8 +408,36 @@
                                 <button id="connect-btn">Connect Device</button>
                               </div>
 
-                              <div id="chat-box" class="chat-display-box">
-                                </div>
+                              <div class="chat-module-wrapper">
+    
+    <div class="chat-sidebar">
+        <div class="profile-handle-bar">
+            <label for="user-handle-input">Your User Handle</label>
+            <input type="text" id="user-handle-input" value="ApexUser" onchange="updateUserHandle(this.value)">
+        </div>
+        <ul class="chat-threads-list" id="chat-list-target">
+            </ul>
+    </div>
+
+    <div class="chat-display-pane">
+        <div class="chat-pane-header">
+            <div id="chat-title-display" style="font-size: 14px; font-weight: 600;">Select a matrix conversation</div>
+            <button id="rename-action-btn" style="display: none;" onclick="triggerChatRename()">Rename Channel</button>
+        </div>
+
+        <div class="imessage-scroller" id="chat-messages-target">
+            <div class="no-active-chat" style="color: var(--text-muted); font-size: 13px; text-align: center; margin-top: 40px;">
+                No active session context selected.
+            </div>
+        </div>
+
+        <div class="imessage-input-footer" id="chat-input-row" style="display: none;">
+            <input type="text" id="message-text-field" placeholder="iMessage Content Layer..." onkeydown="if(event.key === 'Enter') executeMessageSend()">
+            <button onclick="executeMessageSend()">Send</button>
+        </div>
+    </div>
+
+</div>
 
                               <div class="chat-input-row">
                                 <input type="text" id="msg-input" placeholder="Connect to a device to start exchanging live data..." disabled>
