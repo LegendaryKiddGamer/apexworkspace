@@ -1,29 +1,25 @@
 {
-  "name": "apexworkspace",
-  "version": "1.0.14",
-  "description": "Apex Workspace Matrix OS",
+  "name": "apex-workspace-app",
+  "version": "1.0.15",
+  "description": "Custom standalone Mac dock workspace application",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder build --mac",
-    "publish": "electron-builder build --mac -p always"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
-  "dependencies": {
-    "electron-notification-shim": "^1.0.0" 
-  },
+  "author": "Ahan_Developer",
+  "license": "ISC",
   "devDependencies": {
-    "electron": "^43.1.0",
+    "electron": "^30.0.0",
     "electron-builder": "^24.13.3"
   },
   "build": {
-    "appId": "com.apex.workspace",
+    "appId": "com.ahan.apexworkspace",
     "productName": "ApexWorkspace",
     "mac": {
-      "category": "public.app-category.developer-tools",
-      "target": [
-        "dmg",
-        "zip"
-      ]
+      "category": "public.app-category.utilities",
+      "target": ["dmg", "zip"]
     },
     "publish": {
       "provider": "github",
