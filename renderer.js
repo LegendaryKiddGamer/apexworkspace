@@ -43,7 +43,7 @@ const chats = {
     }
 };
 
-// Mock Reference for your active network sockets
+// Mock Reference for active network sockets
 let networkSocket = {
     send: (payloadString) => {
         console.log("Transmitting network data array:", JSON.parse(payloadString));
@@ -177,7 +177,7 @@ function updateUserHandle(newHandle) {
     // Update the middle status card handle layout
     const middleHandleDisplay = document.getElementById("middleDisplayHandle");
     if (middleHandleDisplay) {
-        middleHandleDisplay.innerText = sanitized;
+        middleHandleDisplay.innerText = `Logged in as ${sanitized}. Select a matrix conversation to start swapping live data...`;
     }
 
     // Broadcast change package across socket networks
@@ -210,7 +210,7 @@ window.copyServerID = function() {
 // ============================================================================
 
 function renderSidebarChannels() {
-    const listContainer = document.getElementById("serverList") || document.getElementById("chat-list-target");
+    const listContainer = document.getElementById("serverListContainer");
     if (!listContainer) return;
     
     listContainer.innerHTML = "";
@@ -228,28 +228,62 @@ function renderSidebarChannels() {
             border-radius: 8px; 
             cursor: pointer; 
             transition: 0.2s;
-            background: ${isActive ? '#1a1f2c' : 'transparent'};
-            border: 1px solid ${isActive ? '#2d3548' : 'transparent'};
+            background: ${isActive ? 'rgba(37, 99, 235, 0.15)' : 'rgba(0, 0, 0, 0.2)'};
+            border: 1px solid ${isActive ? 'rgba(37, 99, 235, 0.3)' : 'rgba(255, 255, 255, 0.05)'};
         `;
         
         item.onclick = () => selectChatThread(chat.id);
 
         const titleSpan = document.createElement("span");
         titleSpan.style.cssText = `
+            font-size: 12px;
             font-weight: 500;
-            color: ${isActive ? '#3b82f6' : '#a0aec0'};
+            color: ${isActive ? '#60a5fa' : '#a1a1aa'};
         `;
         titleSpan.innerText = `🚀 ${chat.customName ? chat.customName : chat.originalHandle}`;
 
-        const closeBtn = document.createElement("span");
+        const closeBtn = document.createElement("button");
         closeBtn.className = "close-btn";
         closeBtn.innerHTML = "&times;";
-        closeBtn.style.cssText = "color: #666; font-size: 18px; cursor: pointer;";
+        closeBtn.style.cssText = "color: #71717a; font-size: 16px; cursor: pointer; background: transparent; border: none; padding: 0 4px;";
+        closeBtn.onclick = (e) => {
+            e.stopPropagation();
+            delete chats[chat.id];
+            if (currentChatId === chat.id) {
+                currentChatId = null;
+                resetChatPane();
+            }
+            renderSidebarChannels();
+        };
 
         item.appendChild(titleSpan);
         item.appendChild(closeBtn);
         listContainer.appendChild(item);
     });
+}
+
+function resetChatPane() {
+    const inputRow = document.getElementById("chat-input-row");
+    if (inputRow) inputRow.style.display = "none";
+
+    const headerTitle = document.getElementById("currentServerTitle");
+    if (headerTitle) headerTitle.innerText = "Select a matrix conversation";
+
+    const visibleServerId = document.getElementById("currentServerIDDisplay");
+    if (visibleServerId) visibleServerId.innerText = "------";
+
+    const actionBtn = document.getElementById("serverActionButton");
+    if (actionBtn) actionBtn.innerText = "Create New Server";
+
+    const messageWindow = document.getElementById("chatLogsText");
+    if (messageWindow) {
+        messageWindow.innerHTML = `
+            <div class="no-active-chat text-center my-auto flex flex-col items-center justify-center space-y-2 text-zinc-500 text-xs">
+                <span>💬</span>
+                <span id="middleDisplayHandle">Select a matrix conversation to start swapping live data...</span>
+            </div>
+        `;
+    }
 }
 
 function selectChatThread(chatId) {
@@ -258,12 +292,12 @@ function selectChatThread(chatId) {
 
     if (!targetChat) return;
 
-    // Show interface inputs
-    const inputRow = document.getElementById("chat-input-row") || document.getElementById("chat-input-container");
-    if (inputRow) inputRow.style.display = "flex";
+    // Show input mechanics row
+    const inputRow = document.getElementById("chat-input-row");
+    if (inputRow) inputRow.style.display = "block";
 
     // Update Headings and visible Server ID key displays
-    const headerTitle = document.getElementById("currentServerTitle") || document.getElementById("chat-title-display");
+    const headerTitle = document.getElementById("currentServerTitle");
     if (headerTitle) {
         headerTitle.innerText = targetChat.customName ? targetChat.customName : targetChat.originalHandle;
     }
@@ -273,26 +307,24 @@ function selectChatThread(chatId) {
         visibleServerId.innerText = targetChat.id;
     }
 
-    // Toggle Button to state "New Conversation"
+    // Toggle Action Button text context
     const actionBtn = document.getElementById("serverActionButton");
     if (actionBtn) {
         actionBtn.innerText = "New Conversation";
     }
 
-    const addPersonBtn = document.getElementById("addPersonBtn");
-    if (addPersonBtn) {
-        addPersonBtn.style.display = "block";
-    }
-
     // Draw message logs
-    const messageWindow = document.getElementById("chatLogsText") || document.getElementById("chat-messages-target");
+    const messageWindow = document.getElementById("chatLogsText");
     if (messageWindow) {
         messageWindow.innerHTML = "";
         messageWindow.style.textAlign = "left";
-        messageWindow.style.display = "block";
 
         if (targetChat.messages.length === 0) {
-            messageWindow.innerHTML = `<div style="text-align: center; color: #4a5568; margin-top: 20px;">No message history context selected. Start typing to send a message...</div>`;
+            messageWindow.innerHTML = `
+                <div class="no-active-chat text-center my-auto flex flex-col items-center justify-center space-y-2 text-zinc-500 text-xs">
+                    <span>💬</span>
+                    <span>No message history context selected. Start typing below to send a message...</span>
+                </div>`;
         } else {
             targetChat.messages.forEach(msg => {
                 appendBubbleToDOM(msg.text, msg.isMe);
@@ -306,7 +338,7 @@ function selectChatThread(chatId) {
 
 // Handle actions for creating a new server or switching to a matched short-key
 function handleServerAction() {
-    const serverInput = document.getElementById("serverNameInput");
+    const serverInput = document.getElementById("newServerInput");
     const inputVal = serverInput ? serverInput.value.trim() : "";
     
     if (!inputVal) return alert("Please enter a Name or short Server ID!");
@@ -314,7 +346,7 @@ function handleServerAction() {
     // Search existing keys
     let foundChatKey = null;
     for (const [key, details] of Object.entries(chats)) {
-        if (details.id.toLowerCase() === inputVal.toLowerCase()) {
+        if (details.id.toLowerCase() === inputVal.toLowerCase() || details.originalHandle.toLowerCase() === inputVal.toLowerCase()) {
             foundChatKey = key;
             break;
         }
@@ -345,7 +377,7 @@ function handleServerAction() {
 // ============================================================================
 
 window.executeMessageSend = function() {
-    const input = document.getElementById("chatMessageField") || document.getElementById("message-text-field");
+    const input = document.getElementById("chatMessageField");
     const payloadText = input ? input.value.trim() : "";
 
     if (!payloadText || !currentChatId) return;
@@ -366,7 +398,7 @@ window.executeMessageSend = function() {
 };
 
 function appendBubbleToDOM(text, isMe) {
-    const targetBox = document.getElementById("chatLogsText") || document.getElementById("chat-messages-target");
+    const targetBox = document.getElementById("chatLogsText");
     if (!targetBox) return;
 
     // Clear placeholder texts
@@ -388,8 +420,9 @@ function appendBubbleToDOM(text, isMe) {
         padding: 10px 14px;
         border-radius: 12px;
         font-size: 13px;
-        background: ${isMe ? '#2563eb' : '#22252e'};
+        background: ${isMe ? '#2563eb' : '#27272a'};
         color: white;
+        border: 1px solid ${isMe ? '#3b82f6' : '#3f3f46'};
     `;
 
     row.appendChild(bubble);
@@ -398,7 +431,7 @@ function appendBubbleToDOM(text, isMe) {
 }
 
 function scrollToLatestMessage() {
-    const container = document.getElementById("chatLogsText") || document.getElementById("chat-messages-target");
+    const container = document.getElementById("chatLogsText");
     if (container) {
         container.scrollTop = container.scrollHeight;
     }
