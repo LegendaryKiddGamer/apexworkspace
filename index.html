@@ -32,6 +32,7 @@
 
     <div class="flex-1 bg-[#1e1e1e] rounded-2xl border border-white/5 shadow-2xl overflow-hidden flex flex-col">
         
+        <!-- Header Bar -->
         <div class="drag h-14 bg-[#242424] border-b border-white/5 flex items-center justify-between px-6 shrink-0 relative">
             <div class="flex items-center space-x-2 no-drag w-24 font-bold text-lg"></div>
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -46,6 +47,7 @@
 
         <div class="flex flex-1 overflow-hidden relative">
             
+            <!-- Navigation Sidebar -->
             <div class="w-68 bg-[#111111] border-r border-white/5 flex flex-col p-5 shrink-0 no-drag justify-between">
                 <div class="space-y-6">
                     <div class="p-3.5 bg-zinc-900/60 border border-white/5 rounded-xl flex items-center space-x-3.5 shadow-inner">
@@ -81,8 +83,10 @@
                 </div>
             </div>
 
+            <!-- Main Content Area -->
             <div class="flex-1 bg-[#1a1a1a] overflow-hidden relative no-drag">
                 
+                <!-- Home Base Panel -->
                 <div id="homeWorkspace" class="smooth-panel active-panel absolute inset-0 flex flex-col p-10 overflow-y-auto space-y-8">
                     <div class="pt-3 pb-2">
                         <h1 class="text-3xl font-bold text-zinc-100 tracking-tight">Good Day, Ahan</h1>
@@ -99,6 +103,7 @@
                     </div>
                 </div>
 
+                <!-- Word Office Panel -->
                 <div id="docsWorkspace" class="smooth-panel hidden-panel absolute inset-0 flex flex-col">
                     <div class="px-5 py-3 bg-[#222222] border-b border-white/5 flex items-center justify-between shrink-0">
                         <div class="flex items-center space-x-2.5">
@@ -117,6 +122,7 @@
                     </div>
 
                     <div class="bg-[#222222] border-b border-white/5 px-5 py-4 min-h-[142px] shrink-0 relative overflow-hidden">
+                        <!-- Home Controls -->
                         <div id="ribbon-home-controls" class="smooth-tab opacity-100 absolute inset-0 px-5 py-3 flex flex-col gap-3">
                             <div class="flex items-center gap-3 flex-wrap">
                                 <select onchange="applyTextFormat('fontName', this.value)" class="bg-[#2e2e2e] border border-white/10 rounded-lg px-3 py-2 text-xs text-zinc-200 font-medium outline-none cursor-pointer"><option value="Arial">Arial</option><option value="Courier New">Courier</option><option value="Georgia">Georgia</option><option value="Times New Roman">Times</option></select>
@@ -131,6 +137,7 @@
                                 <button onclick="applyTextFormat('justifyRight')" class="px-2.5 py-2 hover:bg-zinc-800 rounded text-[11px] font-medium text-zinc-300 transition">Align R</button>
                             </div>
                             <div class="flex items-center gap-3 flex-wrap rounded-xl border border-white/10 bg-[#1f1f1f] px-3 py-3">
+                                <!-- Text Color Picker -->
                                 <div class="flex items-center gap-2">
                                     <button type="button" onclick="applyRgbTextColor()" onmousedown="saveOfficeSelection()" class="relative h-12 w-12 rounded-full p-[3px] bg-[conic-gradient(#ff0000,#ff7a00,#ffe600,#42ff00,#00ffc8,#0066ff,#a100ff,#ff0000)] shadow-sm">
                                         <span id="textColorPreview" class="block h-full w-full rounded-full border border-white/20" style="background:#3b82f6;"></span>
@@ -152,6 +159,7 @@
 
                                 <div class="w-px h-10 bg-white/10 mx-1.5"></div>
 
+                                <!-- Highlight Color Picker -->
                                 <div class="flex items-center gap-2">
                                     <button type="button" onclick="applyRgbHighlightColor()" onmousedown="saveOfficeSelection()" class="relative h-12 w-12 rounded-full p-[3px] bg-[conic-gradient(#ff0000,#ff7a00,#ffe600,#42ff00,#00ffc8,#0066ff,#a100ff,#ff0000)] shadow-sm">
                                         <span id="highlightColorPreview" class="block h-full w-full rounded-full border border-white/20" style="background:#fef08a;"></span>
@@ -172,6 +180,8 @@
                                 <button onclick="applyRgbHighlightColor()" onmousedown="saveOfficeSelection()" class="px-3 py-2 rounded-lg text-[10px] font-semibold bg-yellow-500 text-black">Apply Highlight</button>
                             </div>
                         </div>
+
+                        <!-- Insert Controls -->
                         <div id="ribbon-insert-controls" class="smooth-tab opacity-0 pointer-events-none absolute top-2 bottom-2 left-5 right-5 flex items-center gap-2">
                             <button onclick="insertDocumentElement('image')" class="px-3.5 py-1 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-xs font-semibold text-zinc-200 border border-white/5 transition">🖼️ Insert Image</button>
                             <div class="relative">
@@ -181,33 +191,13 @@
                                         <div class="space-y-1">
                                             <div class="text-[10px] text-zinc-400 font-semibold uppercase tracking-wide">Rows</div>
                                             <select id="tableRowCount" class="w-full bg-[#2b2b2b] border border-white/10 rounded-lg px-2.5 py-2 text-xs text-zinc-200 font-medium outline-none cursor-pointer">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3" selected>3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                                <option value="9">9</option>
-                                                <option value="10">10</option>
+                                                <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
                                             </select>
                                         </div>
                                         <div class="space-y-1">
                                             <div class="text-[10px] text-zinc-400 font-semibold uppercase tracking-wide">Columns</div>
                                             <select id="tableColumnCount" class="w-full bg-[#2b2b2b] border border-white/10 rounded-lg px-2.5 py-2 text-xs text-zinc-200 font-medium outline-none cursor-pointer">
-                                                <option value="1">1</option>
-                                                <option value="2" selected>2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                                <option value="9">9</option>
-                                                <option value="10">10</option>
-                                                <option value="11">11</option>
-                                                <option value="12">12</option>
+                                                <option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
                                             </select>
                                         </div>
                                     </div>
@@ -217,19 +207,17 @@
                         </div>
                     </div>
 
+                    <!-- Editor Workspace Canvas -->
                     <div class="flex-1 bg-[#141414] p-8 overflow-y-auto flex justify-center relative">
                         <div class="w-full max-w-4xl min-h-[650px] bg-white text-zinc-900 rounded-2xl p-14 shadow-xl flex flex-col space-y-6 border border-black/5 relative h-fit">
-                            
                             <div class="w-full">
                                 <input type="text" id="currentDocumentTitleDisplay" class="text-3xl font-extrabold text-zinc-900 bg-transparent border-none outline-none w-full p-0 tracking-tight" value="Personal Notes Canvas" placeholder="Untitled Document">
                             </div>
-                            
                             <div id="coverBannerArea" class="smooth-tab w-full h-44 bg-gradient-to-r from-indigo-950 to-slate-900 rounded-xl overflow-hidden relative flex items-end justify-end p-3 group border border-black/10">
                                 <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <button class="px-3 py-1.5 bg-black/70 hover:bg-black/90 text-white rounded-lg text-[10px] font-bold border border-white/10 uppercase tracking-wider transition">📷 Change Cover Banner</button>
+                                    <button onclick="changeCoverBanner()" class="px-3 py-1.5 bg-black/70 hover:bg-black/90 text-white rounded-lg text-[10px] font-bold border border-white/10 uppercase tracking-wider transition">📷 Change Cover Banner</button>
                                 </div>
                             </div>
-
                             <div id="officeContentCanvas" contenteditable="true" class="outline-none text-sm font-normal leading-relaxed text-zinc-800 flex-1 pt-2">
                                 Welcome back to your original, fully equipped workspace interface canvas. Drag tools, type layout streams, and manage assets natively inside this text body context.
                             </div>
@@ -237,12 +225,14 @@
                     </div>
                 </div>
 
+                <!-- Finder Tasks & Reminders Panel -->
                 <div id="remindersWorkspace" class="smooth-panel hidden-panel absolute inset-0 flex flex-col p-8 space-y-6 overflow-hidden">
                     <div class="pt-3 pb-2">
                         <h1 class="text-2xl font-bold text-zinc-100 flex items-center space-x-2.5"><span>📋</span> <span>Finder Task Directory</span></h1>
                         <p class="text-xs text-zinc-400 mt-1">System alerts loop instantly when deadline fields are hit.</p>
                     </div>
                     <div class="flex-1 grid grid-cols-3 gap-6 overflow-hidden pt-2">
+                        <!-- Directories Column -->
                         <div class="bg-[#222222] border border-white/5 rounded-2xl p-5 flex flex-col">
                             <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-3 px-1">Directories</div>
                             <div id="reminderDirectoryList" class="space-y-1.5 overflow-y-auto flex-1"></div>
@@ -251,6 +241,7 @@
                                 <button onclick="createNewReminderDirectory()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition shadow-md">Create New Directory</button>
                             </div>
                         </div>
+                        <!-- Tasks Column -->
                         <div class="bg-[#222222] border border-white/5 rounded-2xl p-5 flex flex-col space-y-4">
                             <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider px-1">Tasks</div>
                             <div id="taskListContainer" class="flex-1 overflow-y-auto space-y-2"></div>
@@ -259,6 +250,7 @@
                                 <button onclick="addNewTaskNode()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition shadow-md">Insert Task Node</button>
                             </div>
                         </div>
+                        <!-- Configuration / Inspector Column -->
                         <div class="bg-[#222222] border border-white/5 rounded-2xl p-5 flex flex-col">
                             <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-2 px-1">Task Configuration Inspectors</div>
                             <div class="flex-1 flex flex-col space-y-3 overflow-y-auto">
@@ -285,7 +277,7 @@
                     </div>
                 </div>
 
-                <!-- NEW OPTIMIZED CHAT INTERFACE WITH FULL INTEGRITY -->
+                <!-- Chat & Servers Panel -->
                 <div id="chatWorkspace" class="smooth-panel hidden-panel absolute inset-0 flex flex-col p-8 space-y-6 overflow-hidden">
                     <div class="pt-3 pb-2">
                         <h1 class="text-2xl font-bold text-zinc-100 flex items-center space-x-2.5"><span>💬</span> <span>Team Chat Core Servers</span></h1>
@@ -343,7 +335,7 @@
 
                             <!-- Integrated Message & Access Code Rows -->
                             <div id="chat-input-row" class="p-4 bg-[#1a1a1a] border-t border-white/5 space-y-3" style="display: none;">
-                                <!-- Add Remote Sync Access Layer -->
+                                <!-- Remote Sync Access Layer -->
                                 <div class="flex items-center space-x-2">
                                     <input type="text" id="remoteCodeInput" placeholder="Enter remote 6-digit sync code" maxlength="6" class="flex-1 bg-zinc-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-zinc-300 outline-none focus:border-blue-500">
                                     <button id="addPersonBtn" onclick="addPersonToConv()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition shadow-sm">Add Person</button>
@@ -363,12 +355,12 @@
         </div>
     </div>
 
+    <!-- UI Core Logic Engine script -->
     <script>
-        const { ipcRenderer, clipboard } = require('electron');
+        const { ipcRenderer } = require('electron');
         const views = ['home', 'docs', 'reminders', 'chat'];
         const documentStateKey = 'apex-workspace-document-state';
         const reminderStateKey = 'apex-workspace-reminders';
-        const serverIdKey = 'APEX-WS-001';
 
         function generateReminderId() {
             return `rem-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -420,8 +412,7 @@
         function writeStoredJson(key, value) {
             try {
                 localStorage.setItem(key, JSON.stringify(value));
-            } catch {
-            }
+            } catch {}
         }
 
         function syncReminderStateWithMain() {
@@ -451,7 +442,6 @@
         let currentDocumentTab = 'notes';
         let isTableInsertMenuOpen = false;
 
-        // Central Console View Switch Engine
         function switchView(viewName) {
             if (views[currentViewIndex] === 'docs') {
                 persistCurrentDocumentState();
@@ -522,7 +512,6 @@
             saveOfficeSelection();
         }
 
-        // Color Management Helpers
         function rgbToHex(red, green, blue) {
             const toHex = (value) => Number(value).toString(16).padStart(2, '0');
             return `#${toHex(red)}${toHex(green)}${toHex(blue)}`;
@@ -537,7 +526,6 @@
             return [red, green, blue].map((value) => (Number.isFinite(value) ? value : 0));
         }
 
-        // Clamp values safely
         function clampRgbInput(value, fallback = 0) {
             const parsed = parseInt(value, 10);
             if (!Number.isFinite(parsed)) return fallback;
@@ -596,7 +584,7 @@
             applyTextFormat('hiliteColor', hexValue);
         }
 
-        // File/Image Operations
+        // Native File System Operations
         function createHiddenImagePicker(acceptMultiple = false) {
             const picker = document.createElement('input');
             picker.type = 'file';
@@ -620,6 +608,22 @@
             banner.style.backgroundPosition = 'center';
             banner.style.backgroundRepeat = 'no-repeat';
             sendReminderNotification('Cover Banner Updated', 'A local image has been applied to the cover banner.');
+        }
+
+        function changeCoverBanner() {
+            const picker = createHiddenImagePicker(false);
+            picker.addEventListener('change', () => {
+                const file = picker.files[0];
+                if (!file) {
+                    picker.remove();
+                    return;
+                }
+                readImageFile(file, (dataUrl) => {
+                    applyImageAsCoverBanner(dataUrl);
+                    picker.remove();
+                });
+            }, { once: true });
+            picker.click();
         }
 
         function insertLocalImageIntoDocument() {
@@ -648,7 +652,6 @@
             picker.click();
         }
 
-        // Document Management
         function captureDocumentStateFromDom(tabId) {
             const titleInput = document.getElementById('currentDocumentTitleDisplay');
             const canvas = document.getElementById('officeContentCanvas');
@@ -659,7 +662,6 @@
             };
         }
 
-        // Engine State Setters
         function applyDocumentState(tabId) {
             if (!documentState[tabId]) {
                 documentState[tabId] = defaultDocumentState(tabId);
@@ -685,7 +687,6 @@
             writeStoredJson(documentStateKey, documentState);
         }
 
-        // Task & Reminder State Containers
         function getReminderBucket(directoryName = activeReminderDirectory) {
             if (!reminderState[directoryName]) {
                 reminderState[directoryName] = [];
@@ -843,7 +844,6 @@
             syncReminderEditor();
         }
 
-        // OBJECT ELEMENT INSERTION ENGINE
         function insertDocumentElement(type) {
             let elementHtml = '';
 
@@ -876,7 +876,6 @@
             }
         }
 
-        // TASK MANAGER FUNCTIONALITY
         function addNewTaskNode() {
             createNewReminderNode();
         }
@@ -929,7 +928,6 @@
             sendReminderNotification('Reminder Directory', `${directoryName} is now selected.`);
         }
 
-        // Document Cover Toggler Engine
         function toggleCoverState() {
             const banner = document.getElementById('coverBannerArea');
             const btn = document.getElementById('coverTogglerBtn');
@@ -946,7 +944,6 @@
             }
         }
 
-        // Document Tab Toggles
         function switchDocumentTab(docId) {
             persistCurrentDocumentState();
             const btnNotes = document.getElementById('tab-notes');
@@ -962,7 +959,6 @@
             applyDocumentState(docId);
         }
 
-        // Office Ribbon Smooth Cross-Fades
         function switchRibbonTab(tabName) {
             const homeTab = document.getElementById('ribbon-tab-home');
             const insertTab = document.getElementById('ribbon-tab-insert');
