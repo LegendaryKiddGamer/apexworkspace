@@ -26,6 +26,17 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+
+        /* Custom Styles for Chat Message Bubbles */
+        .chat-bubble-custom {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            white-space: pre-wrap;
+            max-width: 70%;
+            width: fit-content;
+            display: inline-block;
+        }
     </style>
 </head>
 <body class="bg-[#161616] text-zinc-100 font-sans select-none overflow-hidden h-screen flex flex-col p-4">
@@ -505,6 +516,26 @@
             return true;
         }
 
+        // Intercepts messages to execute, sends them, and clears the input field
+        function executeMessageSend() {
+            const inputField = document.getElementById('chatMessageField');
+            if (!inputField) return;
+            
+            const messageText = inputField.value.trim();
+            if (messageText === "") return;
+
+            // Send the message payload over to renderer.js
+            if (typeof window.sendMessagePayload === 'function') {
+                window.sendMessagePayload(messageText);
+            } else {
+                console.warn("renderer.js payload messenger hook not found.");
+            }
+
+            // Clear the input field completely
+            inputField.value = "";
+            inputField.focus();
+        }
+
         function applyTextFormat(command, value = null) {
             restoreOfficeSelection();
             document.execCommand(command, false, value);
@@ -537,6 +568,29 @@
             const picker = document.getElementById(kind === 'text' ? 'textColorPicker' : 'highlightColorPicker');
             if (preview) preview.style.background = hexValue;
             if (picker && picker.value !== hexValue) picker.value = hexValue;
+        }
+
+        // Remote Sync API Hooks
+        function addPersonToConv() {
+            const input = document.getElementById('remoteCodeInput');
+            const code = input ? input.value.trim() : "";
+            if (code.length === 6 && typeof window.syncWithPartner === 'function') {
+                window.syncWithPartner(code);
+                input.value = "";
+            }
+        }
+
+        function copyServerID() {
+            const idElement = document.getElementById('currentServerIDDisplay');
+            const btnText = document.getElementById('copyBtnText');
+            if (!idElement || idElement.textContent === "------") return;
+
+            navigator.clipboard.writeText(idElement.textContent).then(() => {
+                if (btnText) {
+                    btnText.textContent = "Copied!";
+                    setTimeout(() => { btnText.textContent = "Copy Server ID Key"; }, 2000);
+                }
+            });
         }
 
         function syncRgbInputsFromColor(kind, hexValue) {
@@ -815,6 +869,7 @@
             sendReminderNotification('Reminder Directory Added', `${directoryName} is ready for new reminders.`);
         }
 
+        // Configuration Inspector Updates
         function updateSelectedReminderDraft() {
             const reminder = getSelectedReminder();
             if (!reminder) return;
