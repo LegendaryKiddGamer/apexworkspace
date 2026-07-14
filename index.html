@@ -26,90 +26,6 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
-
-        /* --- Apex Chat System Styles --- */
-        .chat-wrapper {
-          background: #1e1e24;
-          border: 1px solid #2a2a35;
-          border-radius: 12px;
-          margin-top: 20px;
-          overflow: hidden;
-        }
-        .chat-header-panel {
-          background: #2a2a35;
-          padding: 15px 20px;
-          border-bottom: 1px solid #3a3a4a;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        .my-code-badge {
-          background: #007acc;
-          color: white;
-          padding: 4px 10px;
-          border-radius: 6px;
-          font-family: monospace;
-          font-weight: bold;
-        }
-        .chat-connect-row {
-          display: flex;
-          gap: 10px;
-          padding: 15px 20px;
-          background: #23232a;
-        }
-        .chat-connect-row input, .chat-input-row input {
-          flex: 1;
-          background: #121214;
-          border: 1px solid #3a3a4a;
-          padding: 10px;
-          border-radius: 6px;
-          color: white;
-        }
-        .chat-connect-row button, .chat-input-row button {
-          background: #007acc;
-          color: white;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 6px;
-          cursor: pointer;
-          font-weight: bold;
-        }
-        .chat-connect-row button:disabled, .chat-input-row button:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-        .chat-display-box {
-          background: #121214;
-          height: 300px;
-          overflow-y: auto;
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-        }
-        .chat-msg {
-          max-width: 70%;
-          padding: 10px 14px;
-          border-radius: 8px;
-          line-height: 1.4;
-        }
-        .chat-msg.me {
-          background: #007acc;
-          color: white;
-          align-self: flex-end;
-        }
-        .chat-msg.them {
-          background: #2a2a35;
-          color: #e1e1e6;
-          align-self: flex-start;
-        }
-        .chat-input-row {
-          display: flex;
-          gap: 10px;
-          padding: 15px 20px;
-          background: #1e1e24;
-          border-top: 1px solid #2a2a35;
-        }
     </style>
 </head>
 <body class="bg-[#161616] text-zinc-100 font-sans select-none overflow-hidden h-screen flex flex-col p-4">
@@ -117,8 +33,7 @@
     <div class="flex-1 bg-[#1e1e1e] rounded-2xl border border-white/5 shadow-2xl overflow-hidden flex flex-col">
         
         <div class="drag h-14 bg-[#242424] border-b border-white/5 flex items-center justify-between px-6 shrink-0 relative">
-            <div class="flex items-center space-x-2 no-drag w-24">
-                </div>
+            <div class="flex items-center space-x-2 no-drag w-24 font-bold text-lg"></div>
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div class="text-[11px] font-bold text-zinc-400 uppercase tracking-[0.3em]">Apex Workspace Matrix OS</div>
             </div>
@@ -370,79 +285,74 @@
                     </div>
                 </div>
 
+                <!-- NEW OPTIMIZED CHAT INTERFACE WITH FULL INTEGRITY -->
                 <div id="chatWorkspace" class="smooth-panel hidden-panel absolute inset-0 flex flex-col p-8 space-y-6 overflow-hidden">
                     <div class="pt-3 pb-2">
                         <h1 class="text-2xl font-bold text-zinc-100 flex items-center space-x-2.5"><span>💬</span> <span>Team Chat Core Servers</span></h1>
                         <p class="text-xs text-zinc-400 mt-1">Establish encrypted chat nodes and sync channels across server keys.</p>
                     </div>
                     <div class="flex-1 grid grid-cols-3 gap-6 overflow-hidden pt-2">
+                        
+                        <!-- Left Chat Sidebar -->
                         <div class="bg-[#222222] border border-white/5 rounded-2xl p-5 flex flex-col space-y-4">
                             <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider px-1">Active Server List</div>
-                            <div id="serverListContainer" class="flex-1 overflow-y-auto space-y-1.5">
-                                <div class="p-3 bg-blue-600/15 border border-blue-500/20 text-blue-400 text-xs font-semibold rounded-xl flex items-center justify-between shadow-sm"><span>🧬 Global Mainframe Node</span> <button onclick="this.parentElement.remove()" class="text-[10px] opacity-40 hover:opacity-100">✕</button></div>
-                                <div class="p-3 bg-zinc-900/40 border border-white/5 text-zinc-400 text-xs font-medium rounded-xl flex items-center justify-between hover:text-zinc-200"><span>🧬 Project Sync Engine</span> <button onclick="this.parentElement.remove()" class="text-[10px] opacity-40 hover:opacity-100">✕</button></div>
-                            </div>
+                            
+                            <!-- Dynamically loaded servers inside this element -->
+                            <div id="serverListContainer" class="flex-1 overflow-y-auto space-y-1.5"></div>
+                            
+                            <!-- Input action controls -->
                             <div class="space-y-2 pt-2 border-t border-white/5">
-                                <input type="text" id="newServerInput" placeholder="Server Name..." class="w-full bg-[#1c1c1c] border border-white/5 rounded-xl px-3.5 py-2.5 text-xs font-medium text-zinc-200 placeholder-zinc-500 outline-none">
-                                <button onclick="createNewServerNode()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition shadow-md">Create New Server</button>
-                            </div>
-                            <div class="bg-[#181818] border border-white/5 p-3.5 rounded-xl flex flex-col space-y-1">
-                                <div class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Your User Handle</div>
-                                <div class="text-xs font-bold text-zinc-300">Ahan_Developer</div>
-                            </div>
-                        </div>
-                        <div class="col-span-2 bg-[#222222] border border-white/5 rounded-2xl flex flex-col overflow-hidden relative shadow-lg">
-                            <div class="p-4 bg-[#2a2a2a] border-b border-white/5 px-5 flex items-center justify-between shrink-0">
-                                <span class="text-xs font-bold text-zinc-200">Global Mainframe Node</span>
-                                <button class="text-[10px] font-bold text-zinc-500 hover:text-zinc-300 flex items-center space-x-1.5"><span>📋</span> <span>Copy Server ID Key</span></button>
+                                <input type="text" id="newServerInput" placeholder="Server Name or ID..." class="w-full bg-[#1c1c1c] border border-white/5 rounded-xl px-3.5 py-2.5 text-xs font-medium text-zinc-200 placeholder-zinc-500 outline-none focus:border-blue-500">
+                                <button id="serverActionButton" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition shadow-md">Create New Server</button>
                             </div>
                             
-                            <div class="chat-wrapper">
-                              <div class="chat-header-panel">
-                                <h3>Apex Live Chat</h3>
-                                <div>Your Code: <span id="my-code" class="my-code-badge">------</span></div>
-                              </div>
-                              
-                              <div class="chat-connect-row">
-                                <input type="text" id="target-code" placeholder="Enter remote 6-digit code" maxlength="6">
-                                <button id="connect-btn">Connect Device</button>
-                              </div>
+                            <!-- Configurable Local Profile Frame -->
+                            <div class="bg-[#181818] border border-white/5 p-3.5 rounded-xl flex flex-col space-y-2">
+                                <div class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Your Profile Handle</div>
+                                <input type="text" id="editableUserHandle" value="Ahan_Developer" class="w-full bg-zinc-900 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs font-bold text-zinc-200 outline-none focus:border-blue-500">
+                            </div>
+                        </div>
 
-                              <div class="chat-module-wrapper">
-    
-    <div class="chat-sidebar">
-        <div class="profile-handle-bar">
-            <label for="user-handle-input">Your User Handle</label>
-            <input type="text" id="user-handle-input" value="ApexUser" onchange="updateUserHandle(this.value)">
-        </div>
-        <ul class="chat-threads-list" id="chat-list-target">
-            </ul>
-    </div>
+                        <!-- Right Main Active Chat Area -->
+                        <div class="col-span-2 bg-[#222222] border border-white/5 rounded-2xl flex flex-col overflow-hidden relative shadow-lg">
+                            
+                            <!-- Header Info Panel -->
+                            <div class="p-4 bg-[#2a2a2a] border-b border-white/5 px-5 flex items-center justify-between shrink-0">
+                                <div class="flex flex-col space-y-1">
+                                    <span id="currentServerTitle" class="text-xs font-bold text-zinc-200">Select a matrix conversation</span>
+                                    <div class="flex items-center space-x-2">
+                                        <span id="currentServerIDDisplay" class="text-[10px] font-mono text-zinc-500">------</span>
+                                        <button onclick="copyServerID()" class="text-[10px] font-bold text-zinc-400 hover:text-zinc-200 flex items-center space-x-1">
+                                            <span>📋</span> <span id="copyBtnText">Copy Server ID Key</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Sync Code Center -->
+                                <div class="flex items-center space-x-2.5 bg-zinc-900/60 p-2 rounded-xl border border-white/5">
+                                    <span class="text-[10px] font-bold text-zinc-400">Sync Code: <span id="mySyncCode" class="font-mono text-blue-400">------</span></span>
+                                </div>
+                            </div>
+                            
+                            <!-- Conversation Feed Window -->
+                            <div id="chatLogsText" class="flex-1 overflow-y-auto p-5 space-y-3 flex flex-col">
+                                <div class="no-active-chat text-center my-auto flex flex-col items-center justify-center space-y-2 text-zinc-500 text-xs">
+                                    <span>💬</span>
+                                    <span id="middleDisplayHandle">Select a matrix conversation to start swapping live data...</span>
+                                </div>
+                            </div>
 
-    <div class="chat-display-pane">
-        <div class="chat-pane-header">
-            <div id="chat-title-display" style="font-size: 14px; font-weight: 600;">Select a matrix conversation</div>
-            <button id="rename-action-btn" style="display: none;" onclick="triggerChatRename()">Rename Channel</button>
-        </div>
-
-        <div class="imessage-scroller" id="chat-messages-target">
-            <div class="no-active-chat" style="color: var(--text-muted); font-size: 13px; text-align: center; margin-top: 40px;">
-                No active session context selected.
-            </div>
-        </div>
-
-        <div class="imessage-input-footer" id="chat-input-row" style="display: none;">
-            <input type="text" id="message-text-field" placeholder="iMessage Content Layer..." onkeydown="if(event.key === 'Enter') executeMessageSend()">
-            <button onclick="executeMessageSend()">Send</button>
-        </div>
-    </div>
-
-</div>
-
-                              <div class="chat-input-row">
-                                <input type="text" id="msg-input" placeholder="Connect to a device to start exchanging live data..." disabled>
-                                <button id="send-btn" disabled>Send</button>
-                              </div>
+                            <!-- Integrated Message & Access Code Rows -->
+                            <div id="chat-input-row" class="p-4 bg-[#1a1a1a] border-t border-white/5 space-y-3" style="display: none;">
+                                <!-- Add Remote Sync Access Layer -->
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" id="remoteCodeInput" placeholder="Enter remote 6-digit sync code" maxlength="6" class="flex-1 bg-zinc-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-zinc-300 outline-none focus:border-blue-500">
+                                    <button id="addPersonBtn" onclick="addPersonToConv()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition shadow-sm">Add Person</button>
+                                </div>
+                                <!-- Write Core Message Layout -->
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" id="chatMessageField" placeholder="iMessage Content Layer..." class="flex-1 bg-zinc-900 border border-white/10 rounded-xl px-3.5 py-2 text-xs text-zinc-300 outline-none focus:border-blue-500" onkeydown="if(event.key === 'Enter') executeMessageSend()">
+                                    <button onclick="executeMessageSend()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition">Send</button>
+                                </div>
                             </div>
 
                         </div>
@@ -627,6 +537,7 @@
             return [red, green, blue].map((value) => (Number.isFinite(value) ? value : 0));
         }
 
+        // Clamp values safely
         function clampRgbInput(value, fallback = 0) {
             const parsed = parseInt(value, 10);
             if (!Number.isFinite(parsed)) return fallback;
@@ -970,6 +881,34 @@
             createNewReminderNode();
         }
 
+        function createNewReminderNode() {
+            const input = document.getElementById('newTaskInput');
+            const title = input && input.value.trim() ? input.value.trim() : 'New Task Node';
+            const reminders = getReminderBucket();
+            const item = createReminder(title);
+            reminders.push(item);
+            selectedReminderId = item.id;
+            if (input) input.value = '';
+            persistReminderState();
+            renderReminderList();
+            syncReminderEditor();
+            sendReminderNotification('Reminder Added', `${title} has been added to ${activeReminderDirectory}.`);
+        }
+
+        function deleteSelectedReminder() {
+            if (!selectedReminderId) return;
+            const reminders = getReminderBucket();
+            const index = reminders.findIndex(r => r.id === selectedReminderId);
+            if (index !== -1) {
+                const [removed] = reminders.splice(index, 1);
+                selectedReminderId = reminders[0] ? reminders[0].id : null;
+                persistReminderState();
+                renderReminderList();
+                syncReminderEditor();
+                sendReminderNotification('Reminder Removed', `${removed.title} was removed.`);
+            }
+        }
+
         function removeTaskNode(button, reminderId) {
             const reminders = getReminderBucket();
             const index = reminders.findIndex((reminder) => reminder.id === reminderId);
@@ -988,30 +927,6 @@
         function selectReminderDirectory(directoryName) {
             renderReminderDirectory(directoryName);
             sendReminderNotification('Reminder Directory', `${directoryName} is now selected.`);
-        }
-
-        // SERVER CHAT SIMULATOR ENGINE
-        function createNewServerNode() {
-            const input = document.getElementById('newServerInput');
-            if(!input.value.trim()) return;
-            const container = document.getElementById('serverListContainer');
-            const element = document.createElement('div');
-            element.className = "p-3 bg-zinc-900/40 border border-white/5 text-zinc-400 text-xs font-medium rounded-xl flex items-center justify-between hover:text-zinc-200 cursor-pointer";
-            element.innerHTML = `<span>🧬 ${input.value}</span> <button onclick="this.parentElement.remove()" class="text-[10px] opacity-40 hover:opacity-100">✕</button>`;
-            container.appendChild(element);
-            input.value = '';
-        }
-
-        function sendLiveChatMessage() {
-            const input = document.getElementById('chatMessageInput');
-            if(!input.value.trim()) return;
-            const log = document.getElementById('chatMessageLog');
-            const element = document.createElement('div');
-            element.className = "p-3.5 bg-[#2a2a2a] border border-white/5 rounded-xl text-xs leading-relaxed max-w-xl shadow-md self-end ml-auto";
-            element.innerHTML = `<span class="font-bold text-purple-400">Ahan_Developer:</span> ${input.value}`;
-            log.appendChild(element);
-            log.scrollTop = log.scrollHeight;
-            input.value = '';
         }
 
         // Document Cover Toggler Engine
