@@ -27,6 +27,9 @@ const MY_UNIQUE_ID = "myUniqueMachineGUID";
 let myUserHandle = "Ahan_Developer"; // Default starting handle
 let currentChatId = null;
 
+// Track message unique IDs to prevent duplicate rendering from Firebase child listeners
+const seenMessageIds = new Set();
+
 // Initial Active Conversations/Servers Data mapping
 const chats = {
     "GBL-MAIN": {
@@ -126,9 +129,17 @@ function setupActiveSyncListeners() {
     // Listen for incoming message feeds linked in real-time
     onChildAdded(ref(db, 'messages'), (snapshot) => {
         const msg = snapshot.val();
+        const msgId = snapshot.key;
+
+        // Dedup Check: If we have already parsed/pushed this message node, skip it
+        if (seenMessageIds.has(msgId)) return;
+        seenMessageIds.add(msgId);
+
         if (msg && msg.serverId && chats[msg.serverId]) {
             const isMe = msg.senderId === MY_UNIQUE_ID;
             chats[msg.serverId].messages.push({ text: msg.text, isMe });
+            
+            // Only paint directly to DOM if the message belongs to the current active chat thread
             if (currentChatId === msg.serverId) {
                 appendBubbleToDOM(msg.text, isMe);
             }
@@ -168,7 +179,7 @@ window.addPersonToConv = async function() {
 
             alert(`Successfully added ${remoteHandle} to the conversation!`);
             
-            // Add user dynamically to local session
+            // Add user dynamically to local session if not already existing
             if (!chats[remoteUid]) {
                 chats[remoteUid] = {
                     id: remoteUid,
