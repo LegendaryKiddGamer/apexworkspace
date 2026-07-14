@@ -2,7 +2,7 @@
 // 1. FIREBASE INITIALIZATION & CORE SETUP
 // ============================================================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getDatabase, ref, get, update, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+import { getDatabase, ref, get, update, set, onChildAdded, onChildChanged, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB1VkaMjDBMueZPNA1PlhBXePOj64a26J0",
@@ -62,6 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initial render and default UI setups
     renderSidebarChannels();
+    setupActiveSyncListeners();
     
     // Bind change handler to the editable user handle
     const editableInput = document.getElementById("editableUserHandle");
@@ -103,6 +104,36 @@ async function registerMySyncCodeInFirebase(mySixDigitCode, myUid, myHandle) {
     } catch (error) {
         console.error("Failed to register sync code in Firebase:", error);
     }
+}
+
+// Setup real-time listeners on Firebase database to keep messages and chats automatically synced
+function setupActiveSyncListeners() {
+    // Listen for new servers created or updated in Firebase
+    onChildAdded(ref(db, 'servers'), (snapshot) => {
+        const serverData = snapshot.val();
+        const serverId = snapshot.key;
+        if (serverData && !chats[serverId]) {
+            chats[serverId] = {
+                id: serverId,
+                originalHandle: serverData.name || "Remote Server Node",
+                customName: null,
+                messages: []
+            };
+            renderSidebarChannels();
+        }
+    });
+
+    // Listen for incoming message feeds linked in real-time
+    onChildAdded(ref(db, 'messages'), (snapshot) => {
+        const msg = snapshot.val();
+        if (msg && msg.serverId && chats[msg.serverId]) {
+            const isMe = msg.senderId === MY_UNIQUE_ID;
+            chats[msg.serverId].messages.push({ text: msg.text, isMe });
+            if (currentChatId === msg.serverId) {
+                appendBubbleToDOM(msg.text, isMe);
+            }
+        }
+    });
 }
 
 // Looks up a remote 6-digit code in Firebase and links that user to the current channel
@@ -337,7 +368,7 @@ function selectChatThread(chatId) {
 }
 
 // Handle actions for creating a new server or switching to a matched short-key
-function handleServerAction() {
+async function handleServerAction() {
     const serverInput = document.getElementById("newServerInput");
     const inputVal = serverInput ? serverInput.value.trim() : "";
     
@@ -356,17 +387,28 @@ function handleServerAction() {
         alert(`Connecting to existing server: ${chats[foundChatKey].originalHandle}`);
         selectChatThread(foundChatKey);
     } else {
-        // Create new dynamic chat channel locally
+        // Create new server node layout in remote Firebase instance
         const generatedKey = "SRV-" + Math.floor(100 + Math.random() * 900);
-        chats[generatedKey] = {
-            id: generatedKey,
-            originalHandle: inputVal,
-            customName: null,
-            messages: []
-        };
         
-        selectChatThread(generatedKey);
-        alert(`Created server profile: ${inputVal}\nServer ID generated: ${generatedKey}`);
+        try {
+            await set(ref(db, `servers/${generatedKey}`), {
+                name: inputVal,
+                ownerId: MY_UNIQUE_ID,
+                createdAt: Date.now()
+            });
+
+            chats[generatedKey] = {
+                id: generatedKey,
+                originalHandle: inputVal,
+                customName: null,
+                messages: []
+            };
+            
+            selectChatThread(generatedKey);
+            alert(`Created server profile: ${inputVal}\nServer ID generated: ${generatedKey}`);
+        } catch (error) {
+            console.error("Firebase Database Creation Error:", error);
+        }
     }
     
     if (serverInput) serverInput.value = "";
@@ -376,25 +418,29 @@ function handleServerAction() {
 // 7. MESSAGE SENSING & RENDER LAYOUTS
 // ============================================================================
 
-window.executeMessageSend = function() {
+window.executeMessageSend = async function() {
     const input = document.getElementById("chatMessageField");
     const payloadText = input ? input.value.trim() : "";
 
     if (!payloadText || !currentChatId) return;
 
-    // Save message locally
-    chats[currentChatId].messages.push({ text: payloadText, isMe: true });
-    appendBubbleToDOM(payloadText, true);
+    // Build unique ID for individual message packet inside DB paths
+    const messageId = `msg-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-    // Send packet
-    broadcastNetworkPacket({
-        type: "chat_message",
-        targetChatId: currentChatId,
-        text: payloadText
-    });
+    try {
+        await set(ref(db, `messages/${messageId}`), {
+            serverId: currentChatId,
+            senderId: MY_UNIQUE_ID,
+            senderHandle: myUserHandle,
+            text: payloadText,
+            timestamp: Date.now()
+        });
 
-    if (input) input.value = "";
-    scrollToLatestMessage();
+        if (input) input.value = "";
+        scrollToLatestMessage();
+    } catch (error) {
+        console.error("Failed to transmit live messaging transaction packet:", error);
+    }
 };
 
 function appendBubbleToDOM(text, isMe) {
