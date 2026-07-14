@@ -1,36 +1,35 @@
-name: Build and Release Apex Workspace
+name: Build and Release
 
 on:
   push:
     tags:
-      - 'v*' # Triggers the build automatically when you push any version tag (e.g., v1.0.13)
-
-permissions:
-  contents: write
+      - 'v*' # Triggers the build when you push a tag like v1.0.0
 
 jobs:
   release:
-    name: Build and Publish (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
-    
-    strategy:
-      matrix:
-        os: [macos-latest, windows-latest]
+    runs-on: macos-latest
+
+    # Crucial fix to prevent 403 Forbidden publishing errors
+    permissions:
+      contents: write
 
     steps:
-      - name: Check out Git repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20' # Matches your Node environment
           cache: 'npm'
 
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build and Publish Electron Package
-        run: npx electron-builder --publish always
+      - name: Build and Publish Electron App
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # If you are signing/notarizing for macOS, add your Apple credentials here:
+          # APPLE_ID: ${{ secrets.APPLE_ID }}
+          # APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+        run: npx electron-builder --mac -p always
