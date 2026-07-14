@@ -1,13 +1,14 @@
 {
   "name": "apex-workspace-app",
-  "version": "1.0.12",
-  "description": "Apex Workspace Application",
+  "version": "1.0.13",
+  "description": "Custom workspace application with dock shortcuts and system tools",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
   "dependencies": {
     "electron-updater": "^6.1.7"
   },
@@ -16,7 +17,16 @@
     "electron-builder": "^24.13.3"
   },
   "build": {
-    "appId": "com.apex.workspace",
+    "appId": "com.apex.workspace.app",
+    "productName": "ApexWorkspaceApp",
+    "directories": {
+      "output": "dist"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "YOUR_GITHUB_USERNAME",
+      "repo": "YOUR_REPOSITORY_NAME"
+    },
     "mac": {
       "category": "public.app-category.utilities",
       "target": [
@@ -29,11 +39,9 @@
         "nsis"
       ]
     },
-    "directories": {
-      "output": "dist"
-    },
-    "publish": {
-      "provider": "github"
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   }
 }
