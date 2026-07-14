@@ -7,7 +7,7 @@
     "start": "electron .",
     "dist": "electron-builder"
   },
-  "author": "Your Name <your.email@example.com>",
+  "author": "Ahan Jadhav <ahan.jadhav@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "electron-updater": "^6.1.7"
@@ -24,8 +24,8 @@
     },
     "publish": {
       "provider": "github",
-      "owner": "YOUR_GITHUB_USERNAME",
-      "repo": "YOUR_REPOSITORY_NAME"
+      "owner": "LegendaryKiddGamer",
+      "repo": "apexworkspace"
     },
     "mac": {
       "category": "public.app-category.utilities",
