@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*' # Triggers the build when you push a tag like v1.0.0
+      - 'v*'
 
 jobs:
   release:
@@ -13,7 +13,6 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
-    # Crucial fix to prevent 403 Forbidden publishing errors
     permissions:
       contents: write
 
@@ -24,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Matches your Node environment
+          node-version: '20'
           cache: 'npm'
 
       - name: Install Dependencies
@@ -33,4 +32,4 @@ jobs:
       - name: Build and Publish Electron App
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx electron-builder -p always
+        run: npx electron-builder --mac --win --publish always
