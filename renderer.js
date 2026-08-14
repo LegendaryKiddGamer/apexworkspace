@@ -127,7 +127,7 @@ function setupActiveSyncListeners() {
     });
 
     // Listen for incoming message feeds linked in real-time
-    onChildAdded(ref(db, 'messages'), (snapshot) => {
+    onChildAdded(ref(db, 'messages'), async (snapshot) => {
         const msg = snapshot.val();
         const msgId = snapshot.key;
 
@@ -135,7 +135,29 @@ function setupActiveSyncListeners() {
         if (seenMessageIds.has(msgId)) return;
         seenMessageIds.add(msgId);
 
-        if (msg && msg.serverId && chats[msg.serverId]) {
+        if (msg && msg.serverId) {
+            // Ensure the channel exists dynamically in local state if not already loaded
+            if (!chats[msg.serverId]) {
+                let channelName = "Remote Server Node";
+                
+                try {
+                    const serverSnapshot = await get(ref(db, `servers/${msg.serverId}`));
+                    if (serverSnapshot.exists() && serverSnapshot.val().name) {
+                        channelName = serverSnapshot.val().name;
+                    }
+                } catch (err) {
+                    console.error("Failed to fetch server details for message feed:", err);
+                }
+
+                chats[msg.serverId] = {
+                    id: msg.serverId,
+                    originalHandle: channelName,
+                    customName: null,
+                    messages: []
+                };
+                renderSidebarChannels();
+            }
+
             const isMe = msg.senderId === MY_UNIQUE_ID;
             chats[msg.serverId].messages.push({ text: msg.text, isMe });
             
