@@ -1,30 +1,30 @@
 {
-  "name": "apex-workspace-app",
-  "version": "1.0.15",
-  "description": "Custom standalone Mac dock workspace application",
+  "name": "apexworkspace",
+  "version": "1.0.19",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder"
-  },
-  "author": "Ahan_Developer",
-  "license": "ISC",
-  "devDependencies": {
-    "electron": "^30.0.0",
-    "electron-builder": "^24.13.3"
+    "build": "electron-builder"
   },
   "build": {
-    "appId": "com.ahan.apexworkspace",
+    "appId": "com.legendarykiddgamer.apexworkspace",
     "productName": "ApexWorkspace",
+    "directories": {
+      "output": "dist"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "LegendaryKiddGamer",
+        "repo": "apexworkspace"
+      }
+    ],
     "mac": {
-      "category": "public.app-category.utilities",
+      "category": "public.app-category.developer-tools",
       "target": ["dmg", "zip"]
     },
-    "publish": {
-      "provider": "github",
-      "owner": "LegendaryKiddGamer",
-      "repo": "apexworkspace"
+    "win": {
+      "target": ["nsis", "zip"]
     }
   }
 }
